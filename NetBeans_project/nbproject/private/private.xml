@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/instructions/InstructionControl.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/registers/Register8b_Normal.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/CPU.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/instructions/Instruction.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/instructions/InstructionLiteral.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/registers/Register8b_Unimplemented.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/instructions/InstructionByte.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/registers/Register8b_Base.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/functionRegisters/RegisterPC.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/registers/RegisterStatus.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/instructions/InstructionBit.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/functionRegisters/RegisterTmr0.java</file>
+            <file>file:/E:/Danijel/FAX/Zavrsni%20rad/Aplikacija/NetBeans_SimulatorPIC16_gui/src/cpu/RegisterFileMemory.java</file>
+        </group>
+    </open-files>
+</project-private>
