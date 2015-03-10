@@ -20,7 +20,7 @@ public class InstructionByte extends Instruction
     private final int registerAddress;
     public final boolean destinationIsW;
     
-    public final Register8b_Base registarOperand;
+    public Register8b_Base registarOperand;
     public Register8b_Base registarDestination; 
     
     public InstructionByte(int op) 
@@ -29,15 +29,14 @@ public class InstructionByte extends Instruction
         type = opcode & MASKA_INSTR_6;
         registerAddress = opcode & MASKA_FILE_7;
         destinationIsW = ( 0 == (opcode & MASKA_INSTR_DEST) );
-        
-        // ToDo.: sto ako je u pitanju registar0 - indirektni registar
-        registarOperand = registarDestination = registerFile.getRAM(registerAddress);
-        
+             
         if (destinationIsW )
         {
-            // Ako je destinacija F, operaciju izvodimo nad samim registarOperand
-            // ako je destinacija W, operaciju izvodimo na privremenom registru jer operand mora ostati nepromjenjen
-            registarDestination = new Register8b_Normal();
+            registarDestination = registerFile.W;
+        }
+        else
+        {
+            registarOperand = registerFile.W;
         }
     }
     
@@ -45,34 +44,38 @@ public class InstructionByte extends Instruction
     public void izvrsi()
     {
         super.izvrsi(); // uvecava PC
-        
-        // Ukoliko je destinacija registar W - operand mora biti nepromjenjen nakon operacije, pa ga kopiramo u privremeni registar i nad privremenom vrsimo operaciju.
-        // Nije najbrze rjesenje ali omogucava zajednicki/jednak kod za oba slucaja - manje koda manje gresaka.
+
+        // .getRAM mora bit pozvan kod svakog izvrsavanja zbog bankirane memorije
         if (destinationIsW )
         {
-            registarDestination.set(registarOperand);
+            registarOperand = registerFile.getRAM(registerAddress);
+        }
+        else
+        {
+            registarDestination = registerFile.getRAM(registerAddress);
         }
         
         
         if (type == OPCODE_MOVWF)
         {
-            // ne koristi se registarDestination jer je kod instrukcije MOVWF destinacija uvijek operand
-            registarOperand.set(registerFile.W);
+            registarDestination.set(registerFile.W);
         }
         else if (type == OPCODE_ADDWF)
         {        
-            Flags zastavice = registarDestination.add( registerFile.W );
+            Flags zastavice = registarDestination.add( registarOperand );
 
             registerFile.STATUS.postaviZastavice( zastavice ); 
         }
         else if (type == OPCODE_SUBWF)
         {        
-            Flags zastavice = registarDestination.sub( registerFile.W );
+            Flags zastavice = registarDestination.sub( registarOperand );
 
             registerFile.STATUS.postaviZastavice( zastavice ); 
         }
         else if ( type == OPCODE_MOVF )
         {
+            registarDestination.set(registerFile.getRAM(registerAddress));
+            
             if (registarDestination.get() == 0)
             {
                 registerFile.STATUS.setZ();
@@ -84,7 +87,7 @@ public class InstructionByte extends Instruction
         }
         else  if (type == OPCODE_ANDWF)
         {
-            boolean newZ = registarDestination.logAnd( registerFile.W );
+            boolean newZ = registarDestination.logAnd( registarOperand );
             
             if ( newZ )
             {
@@ -97,7 +100,7 @@ public class InstructionByte extends Instruction
         }
         else if (type == OPCODE_IORWF)
         {
-            boolean newZ = registarDestination.logOr( registerFile.W );
+            boolean newZ = registarDestination.logOr( registarOperand );
             
             if ( newZ )
             {
@@ -110,7 +113,7 @@ public class InstructionByte extends Instruction
         }
         else if (type == OPCODE_XORWF)
         {
-            boolean newZ = registarDestination.logXor( registerFile.W );
+            boolean newZ = registarDestination.logXor( registarOperand );
             
             if ( newZ )
             {
@@ -121,101 +124,106 @@ public class InstructionByte extends Instruction
                 registerFile.STATUS.clearZ();
             }
         }
-        else if ( type ==  OPCODE_RLF)
+        else
         {
-            boolean newC = registarDestination.rotateLeft( registerFile.STATUS.getC() );
-            
-            if ( newC )
+            if (destinationIsW )
             {
-                registerFile.STATUS.setC();
+                registarDestination.set(registarOperand);
             }
-            else
-            {
-                registerFile.STATUS.clearC();
-            }
-        } 
-        else if ( type ==  OPCODE_RRF)
-        {
-            boolean newC = registarDestination.retateRight( registerFile.STATUS.getC() );
-            
-            if ( newC )
-            {
-                registerFile.STATUS.setC();
-            }
-            else
-            {
-                registerFile.STATUS.clearC();
-            }
-        }
-        else if ( type ==  OPCODE_COMF)
-        {
-            boolean newZ = registarDestination.complement();
 
-            if ( newZ )
-             {
-                 registerFile.STATUS.setZ();
-             }
-             else 
-             {
-                 registerFile.STATUS.clearZ();
-             }
-        }
-        else if ( type ==  OPCODE_SWAPF)
-        {
-            registarDestination.swapNibbles();
-        }
-        else if ( type ==  OPCODE_DECF)
-        {
-            registarDestination.sub(1);
-            
-            if ( 0 == registarDestination.get() )
+            if ( type ==  OPCODE_RLF)
             {
-                registerFile.STATUS.setZ();
+                boolean newC = registarDestination.rotateLeft( registerFile.STATUS.getC() );
+
+                if ( newC )
+                {
+                    registerFile.STATUS.setC();
+                }
+                else
+                {
+                    registerFile.STATUS.clearC();
+                }
+            } 
+            else if ( type ==  OPCODE_RRF)
+            {
+                boolean newC = registarDestination.retateRight( registerFile.STATUS.getC() );
+
+                if ( newC )
+                {
+                    registerFile.STATUS.setC();
+                }
+                else
+                {
+                    registerFile.STATUS.clearC();
+                }
             }
-            else 
+            else if ( type ==  OPCODE_COMF)
             {
+                boolean newZ = registarDestination.complement();
+
+                if ( newZ )
+                 {
+                     registerFile.STATUS.setZ();
+                 }
+                 else 
+                 {
+                     registerFile.STATUS.clearZ();
+                 }
+            }
+            else if ( type ==  OPCODE_SWAPF)
+            {
+                registarDestination.swapNibbles();
+            }
+            else if ( type ==  OPCODE_DECF)
+            {
+                registarDestination.sub(1);
+
+                if ( 0 == registarDestination.get() )
+                {
+                    registerFile.STATUS.setZ();
+                }
+                else 
+                {
+                    registerFile.STATUS.clearZ();
+                }
+            }
+            else if ( type ==  OPCODE_INCF)
+            {
+                registarDestination.add(1);
+
+                if ( 0 == registarDestination.get() )
+                {
+                    registerFile.STATUS.setZ();
+                }
+                else 
+                {
+                    registerFile.STATUS.clearZ();
+                }
+            }
+            else if ( type ==  OPCODE_DECFSZ)
+            {
+                registarDestination.sub(1);
+
+                if ( 0 == registarDestination.get() )
+                {
+                    registerFile.PC.inc();
+                }
+            }
+            else if ( type ==  OPCODE_INCFSZ)
+            {
+                registarDestination.add(1);
+
+                if ( 0 == registarDestination.get() )
+                {
+                    registerFile.PC.inc();
+                }
+            }  
+            else if ( type ==  OPCODE_CLR)
+            {
+                registarDestination.set(0);
                 registerFile.STATUS.clearZ();
-            }
+            }  
         }
-        else if ( type ==  OPCODE_INCF)
-        {
-            registarDestination.add(1);
-            
-            if ( 0 == registarDestination.get() )
-            {
-                registerFile.STATUS.setZ();
-            }
-            else 
-            {
-                registerFile.STATUS.clearZ();
-            }
-        }
-        else if ( type ==  OPCODE_DECFSZ)
-        {
-            registarDestination.sub(1);
-            
-            if ( 0 == registarDestination.get() )
-            {
-                registerFile.PC.inc();
-            }
-        }
-        else if ( type ==  OPCODE_INCFSZ)
-        {
-            registarDestination.add(1);
-            
-            if ( 0 == registarDestination.get() )
-            {
-                registerFile.PC.inc();
-            }
-        }
-        
-        
-        
-        if (destinationIsW )
-        {
-            registerFile.W.set(registarDestination);
-        }
-        
     }
     
     @Override

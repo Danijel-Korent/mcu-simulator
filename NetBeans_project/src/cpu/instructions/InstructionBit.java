@@ -26,13 +26,14 @@ public class InstructionBit extends Instruction
         bit  = (op & MASKA_BIT_3) >> 7;
         
         registerAddress = op & MASKA_FILE_7;
-        registarOperand = registerFile.getRAM(registerAddress);
     }
 
     @Override
     public void izvrsi() 
     {
         super.izvrsi(); 
+        
+        registarOperand = registerFile.getRAM(registerAddress);
         
         if ( type == OPCODE_BCF)
         {
