@@ -5,6 +5,7 @@
  */
 package cpu;
 
+import cpu.functionRegisters.RegisterOption;
 import cpu.functionRegisters.RegisterTmr0;
 import cpu.modules.Timer;
 import cpu.registers.Register8b_Base;
@@ -40,7 +41,9 @@ public class RegisterFileMemory
     {
         
         Register8b_Unimplemented regNeimplemetiran = new Register8b_Unimplemented();
+        
         RegisterTmr0 tmr0 = new RegisterTmr0(timerModule);
+        RegisterOption regOption = new RegisterOption();
 
         // Privremeno popunjavanje SFR adresnog prostora sa opcim registrima
         for(int i=1; i < 0x0C; i++) 
@@ -68,6 +71,7 @@ public class RegisterFileMemory
         ramBank0[0] = regNeimplemetiran; // indirektno citanje mem. lokacije "0" (FSR=0) vraca rezultat "0", datasheet str.11
         ramBank1[0] = regNeimplemetiran; // TODO: provjeriti postavljanje STATUS biteva, datasheet str.11 - "Writing to the INDF register indirectly results in a no-operation although STATUS bits may be affected."
         ramBank0[1] = tmr0;
+        ramBank1[1] = regOption;
         ramBank0[2] = PC.getPCL();
         ramBank1[2] = PC.getPCL();
         ramBank0[3] = STATUS;

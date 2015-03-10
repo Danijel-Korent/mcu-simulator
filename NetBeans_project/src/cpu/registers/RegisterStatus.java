@@ -20,10 +20,10 @@ public class RegisterStatus extends Register8b_Normal
 
     
     @Override
-    public void set(int k) 
+    public void set(int newValue) 
     {
-        if (k < 0 || k > 255) throw new IllegalArgumentException("Nepravilna vrijednost argumenta r: " + k);
-        super.set((k & 0x27) | (this.get() & 0x18)); // bitovi 3 i 4 (TO i PD) su non-writable, datasheet str.8
+        if (newValue < 0 || newValue > 255) throw new IllegalArgumentException("Nepravilna vrijednost argumenta r: " + newValue);
+        super.set((newValue & 0x27) | (this.get() & 0x18)); // bitovi 3 i 4 (TO i PD) su non-writable, datasheet str.8
     }
     
     public void postaviZastavice(Flags zastavice)

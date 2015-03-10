@@ -11,23 +11,23 @@ package cpu.registers;
  */
 public class Register8b_Normal extends Register8b_Base
 {
-    private int r;
+    private int value;
 
     public Register8b_Normal() 
     {
-        r = 0;
+        value = 0;
     }
 
     @Override
     public int get()
     {
-        return r;
+        return value;
     }
     
     @Override
-    public void set(int k) 
+    public void set(int newVal) 
     {
-        if (k < 0 || k > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta r: " + k);
-        this.r = k;
+        if (newVal < 0 || newVal > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta r: " + newVal);
+        this.value = newVal;
     }
 }

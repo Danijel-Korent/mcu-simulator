@@ -23,9 +23,9 @@ public class InstructionBit extends Instruction
         super(op);
         
         type = op & MASKA_INSTR_4;
-        bit   = op & MASKA_BIT_3;
+        bit  = (op & MASKA_BIT_3) >> 7;
         
-        int registerAddress = op & MASKA_FILE_7;
+        registerAddress = op & MASKA_FILE_7;
         registarOperand = registerFile.getRAM(registerAddress);
     }
 

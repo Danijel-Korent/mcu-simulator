@@ -19,7 +19,7 @@ public abstract class Register8b_Base
     /***************** Abstract methods ****************/
     
     abstract public int get();
-    abstract public void set(int k);
+    abstract public void set(int newValue);
     
     
     

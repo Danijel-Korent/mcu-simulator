@@ -71,19 +71,36 @@ public class CPU
     private void PokusniProgramRotate()
     {
         int i = 0;
-        // postavi PortB = 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 8 + 2 +1);  // MOVLW 11     : w = 11
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDLW + 8 + 4 +2);  // ANDLW 14     : w & 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 6);  // MOVWF 6, w   : RAM[6] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + i + 5);      // CALL 8
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + 6);           // RLF 6        : RAM[6] = RAM[6] << 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i - 3);      // GOTO 3
+        
+        final short regOption = 0x01; 
+        final short regStatus = 0x03;
+        final short regPortA  = 0x05;
+        final short regPortB  = 0x06;
+
+        // Set PS and PSA bits in Option reg to 0
+        // chage Ram bank to 1
+        
+        // SetBit( regStatus, 5)
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BSF + (5 << 7) + regStatus);
+        // w =  0b11110000
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0xF0); 
+        // regStatus = regStatus & w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDWF + 0x80 + regOption); 
+        // ClearBit( regStatus, 5)
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BCF + (5 << 7) + regStatus);
+        
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 8 + 2 +1);         // MOVLW 11     : w = 11
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDLW + 8 + 4 +2);         // ANDLW 14     : w & 14
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regPortB);  // MOVWF 6, w   : RAM[6] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + i + 5);             // CALL func1
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6        : RAM[6] = RAM[6] << 1
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i - 3);             // GOTO 3
         i++;
         i++;
-        i++;
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + 6);    // RLF 6,f  : RAM[6] = RAM[6] >> 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + 6);    // RLF 6,f  : RAM[6] = RAM[6] >> 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETURN);            // RLF 6,f  : RAM[6] = RAM[6] >> 1
+        i++;                                                                             // func1:
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6,f  : RAM[6] = RAM[6] >> 1
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6,f  : RAM[6] = RAM[6] >> 1
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETURN);                   // RETURN
     }
     
     private void PokusniProgramStari()
