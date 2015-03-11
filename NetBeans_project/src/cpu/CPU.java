@@ -2,6 +2,7 @@ package cpu;
 
 import cpu.registers.Register8b_Base;
 import cpu.instructions.Instruction;
+import cpu.modules.InterruptController;
 import cpu.modules.Timer;
 
 /*
@@ -16,10 +17,13 @@ import cpu.modules.Timer;
  */
 public class CPU 
 {
+    private static final short INT_VECTOR = 0x04;
+    
     // Modules
     private final Timer timerModule = new Timer();
+    private final InterruptController interruptController = new InterruptController();
     
-    // Mem
+    // Memory
     private Instruction[]           rom = new Instruction[1024];
     private final StackMemory       HwStack = new StackMemory(8);
     public final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule);
@@ -56,6 +60,12 @@ public class CPU
     public void izvrsiInstrukciju()
     {
         timerModule.OnTick();
+        
+        if ( interruptController.isInterrupted() )
+        {
+            HwStack.push( RegisterFile.PC.get() );
+            RegisterFile.PC.set( INT_VECTOR );
+        }
         
         rom[ RegisterFile.PC.get() ].izvrsi();
     }
