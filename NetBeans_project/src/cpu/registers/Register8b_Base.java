@@ -72,14 +72,14 @@ public abstract class Register8b_Base
         int rez;
         
         rez = this.get() + k;
-        if (rez > 255) 
+        if (rez > 0xFF) 
         {
-            rez -= 256;
+            rez &= 0xFF;
             zastavice.c = true;
         }
         
         if (rez == 0) zastavice.z = true;
-        if ((this.get() & 0xF + (k & 0xF) ) > 0xF) zastavice.dc = true;
+        if ( ((this.get() & 0xF) + (k & 0xF)) > 0xF ) zastavice.dc = true;
         
         
         this.set(rez);
@@ -109,7 +109,7 @@ public abstract class Register8b_Base
         }
         
         if (rez == 0) zastavice.z = true;
-        if ((this.get() & 0xF - (k & 0xF) ) < 0) zastavice.dc = false;
+        if ( ((this.get() & 0xF) - (k & 0xF)) < 0 ) zastavice.dc = false;
         
         
         this.set(rez);

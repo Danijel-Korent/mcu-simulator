@@ -43,7 +43,7 @@ public class RegisterFileMemory
         Register8b_Unimplemented regNeimplemetiran = new Register8b_Unimplemented();
         
         RegisterTmr0 tmr0 = new RegisterTmr0(timerModule);
-        RegisterOption regOption = new RegisterOption();
+        RegisterOption regOption = new RegisterOption(timerModule);
 
         // Privremeno popunjavanje SFR adresnog prostora sa opcim registrima
         for(int i=1; i < 0x0C; i++) 

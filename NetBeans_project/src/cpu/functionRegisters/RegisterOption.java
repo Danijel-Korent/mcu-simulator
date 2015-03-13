@@ -5,6 +5,7 @@
  */
 package cpu.functionRegisters;
 
+import cpu.modules.Timer;
 import cpu.registers.Register8b_Base;
 
 /**
@@ -22,12 +23,13 @@ public class RegisterOption extends Register8b_Base
 
     
     private int regValue;
-
-    public RegisterOption() 
+    private Timer timer;
+    
+    public RegisterOption( Timer tmr) 
     {
         super();
         
-        regValue = 0;
+        timer = tmr;
         this.set( 0xFF );
     }
     
@@ -45,12 +47,12 @@ public class RegisterOption extends Register8b_Base
         
         if((changedBits & PS) != 0)
         {
-            // setup prescaler
+            timer.SetPrescalerSetting(newValue & PS);
         }
         
         if((changedBits & PSA) != 0)
         {
-            // assign prescaler
+            timer.SetPrescalerActive( (newValue & PSA) == 0 );
         }
         
         if((changedBits & T0CS) != 0)
