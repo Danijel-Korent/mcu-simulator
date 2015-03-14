@@ -12,25 +12,55 @@ package cpu.modules;
 public class Timer 
 {
     private int counter;
-    private int prescaler;
+    private int prescalerCnt;
+    private int prescalerSetting;
+    private boolean prescalerActive;
     
     public Timer()
     {
         counter = 0;
-        prescaler = 0;
+        prescalerCnt = 0;
+        
+        prescalerActive = false;
     }
 
     public void OnTick()
     {
-        // ToDo: add prescaler logic
-        counter++;
+        if( prescalerActive )
+        {
+            int oldValue = prescalerCnt;
+            prescalerCnt++;
+            prescalerCnt &= 0xFF; 
+            
+            if( ((oldValue & prescalerSetting) == 0) && ((prescalerCnt & prescalerSetting) != 0) )
+            //if ( ((prescalerCnt & prescalerSetting) == 0) && ((prescalerCnt ^ (prescalerCnt+1)) & prescalerSetting) != 0 )
+            {
+                counter++;
+            }
+        }
+        else
+        {
+            counter++;
+        }
         
-        if ( counter > 255 )
+        if ( counter > 0xFF )
         {
             counter = 0;
             // ToDo signal overflow
         }
     }
+    
+    public void SetPrescalerActive( boolean active)
+    {
+        prescalerActive = active;
+    }
+    
+    public void SetPrescalerSetting( int setting)
+    {
+        
+        prescalerSetting = 1 << setting;
+    }
+    
     
     public int Get()
     {
@@ -42,6 +72,6 @@ public class Timer
         if (counter < 0 || counter > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta r: " + val);
         
         counter = val;
-        prescaler = 0; // datasheet, str 21.: Writing to TMR0 when the prescaler is assigned to Timer0 will clear the prescaler count
+        prescalerCnt = 0; // datasheet, str 21.: Writing to TMR0 when the prescaler is assigned to Timer0 will clear the prescaler count
     }
 }
