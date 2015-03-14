@@ -16,12 +16,15 @@ public class Timer
     private int prescalerSetting;
     private boolean prescalerActive;
     
-    public Timer()
+    private InterruptController interruptController;
+    
+    public Timer(InterruptController intController )
     {
         counter = 0;
         prescalerCnt = 0;
-        
         prescalerActive = false;
+        
+        interruptController = intController;
     }
 
     public void OnTick()
@@ -46,7 +49,7 @@ public class Timer
         if ( counter > 0xFF )
         {
             counter = 0;
-            // ToDo signal overflow
+            interruptController.setInterruptFlag( InterruptController.FLAG_TIMER , true);
         }
     }
     

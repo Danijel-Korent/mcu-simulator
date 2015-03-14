@@ -20,8 +20,8 @@ public class CPU
     private static final short INT_VECTOR = 0x04;
     
     // Modules
-    private final Timer timerModule = new Timer();
     private final InterruptController interruptController = new InterruptController();
+    private final Timer timerModule = new Timer(interruptController);
     
     // Memory
     private Instruction[]           rom = new Instruction[1024];

@@ -24,7 +24,7 @@ public class RegisterIntcon extends Register8b_Base
     @Override
     public int get() 
     {
-       return controller.getRegIntcon();
+        return controller.getRegIntcon();
     }
 
     @Override
