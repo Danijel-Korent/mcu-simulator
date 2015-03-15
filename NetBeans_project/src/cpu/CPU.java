@@ -26,7 +26,7 @@ public class CPU
     // Memory
     private Instruction[]           rom = new Instruction[1024];
     private final StackMemory       HwStack = new StackMemory(8);
-    public final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule);
+    public final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule, interruptController);
     
     public CPU() 
     { 
@@ -65,6 +65,7 @@ public class CPU
         {
             HwStack.push( RegisterFile.PC.get() );
             RegisterFile.PC.set( INT_VECTOR );
+            interruptController.setGlobalEnable( false );
         }
         
         rom[ RegisterFile.PC.get() ].izvrsi();
@@ -83,19 +84,41 @@ public class CPU
         int i = 0;
         
         final short regOption = 0x01; 
+        final short regTmr0   = 0x01;
         final short regStatus = 0x03;
         final short regPortA  = 0x05;
         final short regPortB  = 0x06;
+        final short regIntcon = 0x0B;
 
+        
+
+        
+        i += 4;
+        
+        // Interrupt vector
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0b11111000); 
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regIntcon);
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETURN);  
+        
+        i++;
+        i++;
+        
+        rom[0] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i);
+
+        
+        // Activete Timer prescaler, a set to 1:2
         // chage Ram bank to 1 --> Set PS and PSA bits in Option reg to 0 --> chage Ram bank to 0
-        // SetBit( regStatus, 5)
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BSF + (5 << 7) + regStatus);
-        // w =  0b11110000
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0xF0); 
-        // regStatus = regStatus & w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDWF + 0x80 + regOption); 
-        // ClearBit( regStatus, 5)
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BCF + (5 << 7) + regStatus);
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BSF + (5 << 7) + regStatus);  // SetBit( regStatus, 5)
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0xF0);  // w =  0b11110000
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDWF + 0x80 + regOption);  // regStatus = regStatus & w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BCF + (5 << 7) + regStatus);  // ClearBit( regStatus, 5)
+        
+        // Enable interrupts
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + 4);             // GOTO 4
+        
+        //  Set timer to 250
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 250); 
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regTmr0);
         
         
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 8 + 2 +1);         // MOVLW 11     : w = 11
@@ -103,7 +126,7 @@ public class CPU
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regPortB);  // MOVWF 6, w   : RAM[6] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + i + 5);             // CALL func1
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6        : RAM[6] = RAM[6] << 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i - 3);             // GOTO 3
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i - 3);             // GOTO -3
         i++;
         i++;
         i++;                                                                             // func1:

@@ -23,7 +23,7 @@ public class InterruptController
     private static final int BIT_PORTB_EN  = 1 << 3;
     private static final int BIT_RB0_EN    = 1 << 4;
     private static final int BIT_TIMER_EN  = 1 << 5;
-    private static final int BIT_EEPROM_EN = 1 << 5;
+    private static final int BIT_EEPROM_EN = 1 << 6;
     private static final int BIT_GLOBAL_EN = 1 << 7;
       
     
@@ -39,9 +39,10 @@ public class InterruptController
     {
         intFlag = new boolean[MAX_INT_SOURCES];
         intEnable = new boolean[MAX_INT_SOURCES];
-        globalEnabled = false;
         
-        regIntcon = 0;
+        // Initiates array values
+        regIntcon = 0xFF;
+        this.setRegIntcon(0);
     }
 
     public boolean isInterrupted()
@@ -88,7 +89,7 @@ public class InterruptController
         intFlag[index] = value;
         
         // update value of INTCON register
-        regIntcon &= 0b111;
+        regIntcon &= ~0b111;
         if( intFlag[FLAG_PORTB] ) regIntcon |= BIT_PORTB_INT;
         if( intFlag[FLAG_RB0] )   regIntcon |= BIT_RB0_INT;
         if( intFlag[FLAG_TIMER] ) regIntcon |= BIT_TIMER_INT;
@@ -108,7 +109,7 @@ public class InterruptController
         intEnable[index] = value;
         
         // update value of INTCON register
-        regIntcon &= 0b01111000;
+        regIntcon &= ~0b01111000;
         if( intEnable[FLAG_PORTB] )  regIntcon |= BIT_PORTB_EN;
         if( intEnable[FLAG_RB0] )    regIntcon |= BIT_RB0_EN;
         if( intEnable[FLAG_TIMER] )  regIntcon |= BIT_TIMER_EN;
@@ -131,40 +132,40 @@ public class InterruptController
     {
         int changedBits = regIntcon ^ newValue; // Bitwise XOR 
         
-
+        
         if((changedBits & BIT_PORTB_INT) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_PORTB_INT) != 0);
+            this.setInterruptFlag(FLAG_PORTB, (newValue & BIT_PORTB_INT) != 0);
         }
         
         if((changedBits & BIT_RB0_INT) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_RB0_INT) != 0);
+            this.setInterruptFlag( FLAG_RB0, (newValue & BIT_RB0_INT) != 0 );
         }
         
         if((changedBits & BIT_TIMER_INT) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_TIMER_INT) != 0);
+            this.setInterruptFlag( FLAG_TIMER, (newValue & BIT_TIMER_INT) != 0);
         }
         
         if((changedBits & BIT_PORTB_EN) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_PORTB_EN) != 0);
+            this.setInterruptEnable( FLAG_PORTB, (newValue & BIT_PORTB_EN) != 0);
         }
         
         if((changedBits & BIT_RB0_EN) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_RB0_EN) != 0);
+            this.setInterruptEnable( FLAG_RB0, (newValue & BIT_RB0_EN) != 0);
         }
         
         if((changedBits & BIT_TIMER_EN) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_TIMER_EN) != 0);
+            this.setInterruptEnable( FLAG_TIMER, (newValue & BIT_TIMER_EN) != 0);
         }
         
         if((changedBits & BIT_EEPROM_EN) != 0)
         {
-            this.setGlobalEnable((newValue & BIT_EEPROM_EN) != 0);
+            this.setInterruptEnable( FLAG_EEPROM, (newValue & BIT_EEPROM_EN) != 0);
         }
         
         if((changedBits & BIT_GLOBAL_EN) != 0)

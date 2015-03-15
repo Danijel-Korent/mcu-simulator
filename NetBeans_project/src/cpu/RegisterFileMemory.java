@@ -5,6 +5,7 @@
  */
 package cpu;
 
+import cpu.functionRegisters.RegisterIntcon;
 import cpu.functionRegisters.RegisterOption;
 import cpu.functionRegisters.RegisterTmr0;
 import cpu.modules.Timer;
@@ -13,6 +14,7 @@ import cpu.registers.Register8b_Normal;
 import cpu.registers.RegisterStatus;
 import cpu.registers.Register8b_Unimplemented;
 import cpu.functionRegisters.RegisterPC;
+import cpu.modules.InterruptController;
 
 /**
  *
@@ -37,13 +39,14 @@ public class RegisterFileMemory
     final Register8b_Base TRISB = new Register8b_Normal();
 
     // ToDo: 
-    public RegisterFileMemory(Timer timerModule) 
+    public RegisterFileMemory(Timer timerModule, InterruptController interruptController) 
     {
         
         Register8b_Unimplemented regNeimplemetiran = new Register8b_Unimplemented();
         
         RegisterTmr0 tmr0 = new RegisterTmr0(timerModule);
         RegisterOption regOption = new RegisterOption(timerModule);
+        RegisterIntcon regIntcon = new RegisterIntcon(interruptController);
 
         // Privremeno popunjavanje SFR adresnog prostora sa opcim registrima
         for(int i=1; i < 0x0C; i++) 
@@ -87,6 +90,9 @@ public class RegisterFileMemory
         
         ramBank0[7] = regNeimplemetiran;
         ramBank1[7] = regNeimplemetiran;
+        
+        ramBank0[0xB] = regIntcon;
+        ramBank1[0xB] = regIntcon;
     }
     
     public Register8b_Base getRAM(int adr)
