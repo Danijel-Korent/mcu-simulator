@@ -30,7 +30,7 @@ implements TableCellRenderer{
         super();
         this.cpu = cpu;
         setOpaque(true);
-        
+
     }
 
     

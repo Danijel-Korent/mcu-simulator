@@ -41,8 +41,18 @@ public class RamTableModel extends AbstractTableModel
     }
     
     @Override
-    public Object getValueAt(int i, int i1) {
-        if (i1 == 0) return Integer.toHexString(i*8);
+    public Object getValueAt(int i, int i1) 
+    {
+        if (i1 == 0)
+        {
+            int val = i*8;
+            if (cpu.RegisterFile.STATUS.getRP0())
+            {
+                val += 0x80;
+            }
+            return Integer.toHexString(val);
+        }
+
         return Integer.toHexString( cpu.getRAM( (byte)(i*8 + i1-1) ).get());
     }  
 }

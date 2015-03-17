@@ -51,6 +51,11 @@ public class App extends javax.swing.JFrame {
         {
            jTable1.getColumnModel().getColumn(x).setCellRenderer(new RomTableCellRenderer(cpu));
         }
+        
+        for (int x = 0; x < ramTableModel.getColumnCount(); x++)
+        {
+           jTable3.getColumnModel().getColumn(x).setCellRenderer(new RamTableCellRenderer(cpu));
+        }
 
     }
     

@@ -117,7 +117,7 @@ public class CPU
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + 4);             // GOTO 4
         
         //  Set timer to 250
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 250); 
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 251); 
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regTmr0);
         
         
