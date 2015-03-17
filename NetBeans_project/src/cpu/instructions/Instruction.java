@@ -68,6 +68,7 @@ public class Instruction
     public static final short OPCODE_GOTO   = 0x2800;
     public static final short OPCODE_CALL   = 0x2000;
     public static final short OPCODE_RETURN = 0x0008;
+    public static final short OPCODE_RETFIE = 0x0009;
     public static final short OPCODE_RETLW  = 0x3400;
     
     

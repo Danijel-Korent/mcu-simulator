@@ -59,6 +59,11 @@ public class InstructionControl extends Instruction
         {
             registerFile.PC.set( stack.pop() );
         }
+        else if (type == OPCODE_RETFIE)
+        {
+            registerFile.PC.set( stack.pop() );
+            registerFile.getRAM( 0x0B ).setBit( 7 );
+        }
     }
     
     @Override
@@ -67,6 +72,7 @@ public class InstructionControl extends Instruction
         if (type == OPCODE_GOTO ) return "GOTO " + value;
         else if (type == OPCODE_CALL ) return "CALL " + value;
         else if (type == OPCODE_RETURN ) return "RETURN";
+        else if (type == OPCODE_RETFIE ) return "RETFIE";
         else if (type == OPCODE_NOP ) return "NOP";
 
         return "Kontrolna Instr.";

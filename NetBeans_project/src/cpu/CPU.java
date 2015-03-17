@@ -96,9 +96,9 @@ public class CPU
         i += 4;
         
         // Interrupt vector
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0b11111000); 
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0b01111000); 
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regIntcon);
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETURN);  
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETFIE);  
         
         i++;
         i++;
