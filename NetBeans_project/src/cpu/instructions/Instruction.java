@@ -57,6 +57,7 @@ public class Instruction
     
     // literal instrukcije
     public static final short OPCODE_MOVLW = 0x3000;
+    public static final short OPCODE_RETLW = 0x3400;
     public static final short OPCODE_ANDLW = 0x3900;
     public static final short OPCODE_ADDLW = 0x3E00; 
     public static final short OPCODE_IORLW = 0x3800; 
@@ -69,7 +70,8 @@ public class Instruction
     public static final short OPCODE_CALL   = 0x2000;
     public static final short OPCODE_RETURN = 0x0008;
     public static final short OPCODE_RETFIE = 0x0009;
-    public static final short OPCODE_RETLW  = 0x3400;
+    public static final short OPCODE_SLEEP  = 0x0063;
+    public static final short OPCODE_CLRWDT = 0x0064;
     
     
     protected static RegisterFileMemory registerFile;

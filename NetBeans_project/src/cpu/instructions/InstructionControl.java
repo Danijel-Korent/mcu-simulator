@@ -74,7 +74,9 @@ public class InstructionControl extends Instruction
         else if (type == OPCODE_RETURN ) return "RETURN";
         else if (type == OPCODE_RETFIE ) return "RETFIE";
         else if (type == OPCODE_NOP ) return "NOP";
-
+        else if (type == OPCODE_SLEEP) return "SLEEP";
+        else if (type == OPCODE_CLRWDT) return "CLRWDT";
+        
         return "Kontrolna Instr.";
     }
 }

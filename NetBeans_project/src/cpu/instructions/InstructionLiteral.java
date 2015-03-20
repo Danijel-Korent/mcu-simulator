@@ -85,6 +85,11 @@ public class InstructionLiteral extends Instruction
 
             registerFile.STATUS.postaviZastavice( zastavice ); 
         }
+        else if (type == OPCODE_RETLW)
+        {
+            registerFile.W.set(value);
+            registerFile.PC.set( stack.pop() );
+        }
     }
     
     @Override
@@ -96,6 +101,7 @@ public class InstructionLiteral extends Instruction
         else if (type == OPCODE_ANDLW ) return "ANDLW " + value;        
         else if (type == OPCODE_IORLW ) return "IORLW " + value;
         else if (type == OPCODE_XORLW ) return "XORLW " + value;
+        else if (type == OPCODE_RETLW ) return "RETLW " + value;
 
         
         return "Nepoznata LIT istrukcija!! PC = " + (registerFile.PC.get()-1) + " : Inst: " + opcode;
