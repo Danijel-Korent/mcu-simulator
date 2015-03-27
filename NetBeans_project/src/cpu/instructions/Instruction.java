@@ -34,13 +34,15 @@ public class Instruction
     // byte-oriented instrukcije
     public static final short OPCODE_ADDWF = 0x0700;
     public static final short OPCODE_MOVF  = 0x0800;
-    public static final short OPCODE_MOVWF = 0x0000;
+    public static final short OPCODE_MOVWF = 0x0080;
     public static final short OPCODE_RLF   = 0x0D00;
     public static final short OPCODE_RRF   = 0x0C00;
     public static final short OPCODE_ANDWF = 0x0500;
     public static final short OPCODE_IORWF = 0x0400;
     public static final short OPCODE_XORWF = 0x0600;
     public static final short OPCODE_CLR   = 0x0100;
+    public static final short OPCODE_CLRF  = OPCODE_CLR + 0x80;
+    public static final short OPCODE_CLRW  = OPCODE_CLR;
     public static final short OPCODE_COMF  = 0x0900;
     public static final short OPCODE_SWAPF = 0x0E00;
     public static final short OPCODE_SUBWF = 0x0200;

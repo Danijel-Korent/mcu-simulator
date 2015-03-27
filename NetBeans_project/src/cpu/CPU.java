@@ -97,7 +97,7 @@ public class CPU
         
         // Interrupt vector
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0b01111000); 
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regIntcon);
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + regIntcon);
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETFIE);  
         
         i++;
@@ -118,12 +118,12 @@ public class CPU
         
         //  Set timer to 250
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 251); 
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regTmr0);
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + regTmr0);
         
         
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 8 + 2 +1);         // MOVLW 11     : w = 11
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDLW + 8 + 4 +2);         // ANDLW 14     : w & 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + regPortB);  // MOVWF 6, w   : RAM[6] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + regPortB);  // MOVWF 6, w   : RAM[6] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + i + 5);             // CALL func1
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6        : RAM[6] = RAM[6] << 1
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i - 3);             // GOTO -3
@@ -140,21 +140,21 @@ public class CPU
         int i = 0;
         rom[i++] = Instruction.Instanciraj(0);
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 133);       // MOVLW 133     : w = 133
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 4);        // MOVWF 4      : RAM[4] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0);       // MOVLW 0     : w = 0
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 0);        // MOVWF 4      : RAM[0] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0);        // MOVWF 4      : RAM[0] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 127-32-1);       // MOVLW 14     : w = 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 6);        // MOVWF 4      : RAM[4] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 6);        // MOVWF 4      : RAM[4] = w
         
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 14);       // MOVLW 14     : w = 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 4);        // MOVWF 4      : RAM[4] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 64);       // MOVLW 64     : w = 64
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 15);       // MOVWF 15     : RAM[15] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 15);       // MOVWF 15     : RAM[15] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVF + 0);    // MOVF 0, w   A: w = RAM[0]
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ADDWF + 15);   // ADDWF 15, w  : w = w + RAM[15] 
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 14);       // MOVWF 14     : RAM[14] = w
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 14);       // MOVWF 14     : RAM[14] = w
         rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 5);         
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0x80 + 2);         // GOTO 5       : GOTO A
+        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 2);         // GOTO 5       : GOTO A
     }
     
     /*
