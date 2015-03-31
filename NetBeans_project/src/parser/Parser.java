@@ -22,7 +22,7 @@ public class Parser
 
     }
     
-    public String Parse( String text)
+    public static ArrayList<AsmInstruction> Parse( String text)
     {
         String retStr = "";
         String tempStr = "";
@@ -89,12 +89,12 @@ public class Parser
         }
         
 
-        return retStr;
+        return instructions;
     }
-    
+  
     
     // parse list of tokens into AsmInstruction list
-    private ArrayList<AsmInstruction> ParseTokens( ArrayList<Token> tokens )
+    private static ArrayList<AsmInstruction> ParseTokens( ArrayList<Token> tokens )
     {
         ArrayList<AsmInstruction> instructions = new ArrayList<>(); 
         
@@ -311,7 +311,7 @@ public class Parser
     }
     
     // Parse string list of words into list of tokens
-    private ArrayList<Token> ParseWords( ArrayList<String> words )
+    private static ArrayList<Token> ParseWords( ArrayList<String> words )
     {
         ArrayList<Token> tokens = new ArrayList<>();
         
@@ -330,7 +330,7 @@ public class Parser
     }
     
     // Parse text string and split it into string list of words and operators (while ignoring comments)
-    private ArrayList<String> ParseText( String text )
+    private static ArrayList<String> ParseText( String text )
     {
         ArrayList<String> tokens = new ArrayList<>();
         int firstLetterPtr = 0;
