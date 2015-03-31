@@ -442,7 +442,7 @@ public class App extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-        cpu.izvrsiInstrukciju();
+        cpu.ExecuteInstruction();
         
         // ToDo: hardcodirano dok se ne implementira hwpin interface
         testDisplay.set( cpu.RegisterFile.PORTB.get() & 0x0F );
@@ -454,7 +454,7 @@ public class App extends javax.swing.JFrame {
         romTableModel.fireTableDataChanged();
         
         // Auto-scrolling in code table
-        jTable2.scrollRectToVisible(jTable2.getCellRect( cpu.RegisterFile.PC.get() + 1, 0, true));
+        jTable2.scrollRectToVisible(jTable2.getCellRect( cpu.RegisterFile.PC.get(), 0, true));
         
         jLabel3.setText(Integer.toString(cpu.RegisterFile.PC.get()));
         jLabel4.setText(Integer.toString(cpu.RegisterFile.W.get()));

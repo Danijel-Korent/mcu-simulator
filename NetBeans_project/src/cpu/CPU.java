@@ -4,6 +4,9 @@ import cpu.registers.Register8b_Base;
 import cpu.instructions.Instruction;
 import cpu.modules.InterruptController;
 import cpu.modules.Timer;
+import java.util.ArrayList;
+import parser.AsmInstruction;
+import parser.Parser;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -41,8 +44,12 @@ public class CPU
         
         
         // Dodavanje pokusnog programa u programsku memoriju
-        PokusniProgramRotate();
-        //PokusniProgramStari();
+        String AsmCode = "";
+       
+        AsmCode = PokusniProgramRotate();
+        //AsmCode = PokusniProgramParser();
+        
+        ParseAssemblerCode( AsmCode );
     }
     
     public Register8b_Base getRAM(int adr)
@@ -57,7 +64,7 @@ public class CPU
     }
     
     
-    public void izvrsiInstrukciju()
+    public void ExecuteInstruction()
     {
         timerModule.OnTick();
         
@@ -77,62 +84,108 @@ public class CPU
         return rom[adr].ispisi();
     }
     
+    public void ParseAssemblerCode( String text )
+    {
+        ArrayList<AsmInstruction> instructions = new ArrayList<>();
+        
+        instructions = Parser.Parse( text );
+
+        int i = 0;
+        for( AsmInstruction instruction : instructions )
+        {
+            int opcode = instruction.GetOpcode();
+            
+            rom[i++] = Instruction.Instanciraj( opcode );
+        }
+    }
+    
     /**************************************************************************************************************/
     
-    private void PokusniProgramRotate()
+    private String PokusniProgramParser()
     {
-        int i = 0;
+        return  
+                "    ;***** VARIABLE DEFINITIONS\n" +
+                "    w_temp        EQU     0x0C        ; variable used for context saving \n" +
+                "    status_temp   EQU     0x0D        ; variable used for context saving\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                " STATUS EQU 3\n" +
+                "\n" +
+                "\n" +
+                "reset:\n" +
+                "\n" +
+                "    ;**********************************************************************\n" +
+                "    ORG     0x000             ; processor reset vector\n" +
+                "    goto    main              ; go to beginning of program\n" +
+                "\n" +
+                "\n" +
+                "    ORG     0x004             ; interrupt vector location\n" +
+                "movwf   w_temp            ; save off current W register contents\n" +
+                "movf	STATUS,w          ; move status register into W register\n" +
+                "movwf	status_temp       ; save off contents of STATUS register\n" +
+                "\n" +
+                "\n" +
+                "; isr code can go here or be located as a call subroutine elsewhere\n" +
+                "\n" +
+                "\n" +
+                "main:		movf    status_temp,w     ; retrieve copy of STATUS register\n" +
+                "		movwf	STATUS            ; restore pre-isr STATUS register contents\n" +
+                "		swapf   w_temp,f\n" +
+                "		swapf   w_temp,w          ; restore pre-isr W register contents\n" +
+                "		retfie                    ; return from interrupt\n" +
+                "               bcf STATUS, 3 ;test\n" +
+                "call reset"
+                ;
+    }
+    
+    private String PokusniProgramRotate()
+    {
         
-        final short regOption = 0x01; 
-        final short regTmr0   = 0x01;
-        final short regStatus = 0x03;
-        final short regPortA  = 0x05;
-        final short regPortB  = 0x06;
-        final short regIntcon = 0x0B;
-
+        String ret =
+                ""
+                + "\n" + "OPTION equ 0x01"
+                + "\n" + "TMR0   equ 0x01"
+                + "\n" + "STATUS equ 0x03"
+                + "\n" + "PORTA  equ 0x05"
+                + "\n" + "PORTB  equ 0x06"
+                + "\n" + "INTCON equ 0x0b"
+                + "\n" + ""
+                + "\n" + "GOTO start"
+                + "\n" + ""
+                + "\n" + "ORG 0x04"
+                + "\n" + "MOVLW 0x78"
+                + "\n" + "MOVWF INTCON    ;enable interrupt sources, clear int flags"
+                + "\n" + "RETFIE          ;return and set global int enable "
+                + "\n" + ""
+                + "\n" + "ORG 10"
+                + "\n" + "start:"
+                + "\n" + "BSF STATUS, 5   ;select bank 1"
+                + "\n" + "MOVLW 0xF0"
+                + "\n" + "ANDWF OPTION, f ;activate prescaler and set to 2:1 "
+                + "\n" + "BCF STATUS, 5   ;select bank 0"
+                + "\n" + "CALL 4          ;to enable interrupts"
+                + "\n" + "MOVLW 251"
+                + "\n" + "IORWF TMR0, f   ;change timer value"
+                + "\n" + ""
+                + "\n" + "petlja:"
+                //+ "\n" + "MOVLW 11"
+                + "\n" + "ANDLW 0xA0"
+                + "\n" + "MOVWF PORTB"
+                + "\n" + "CALL procedura"
+                + "\n" + "RLF PORTB, f"
+                + "\n" + "GOTO petlja"
+                + "\n" + ""
+                + "\n" + "org 0x20"
+                + "\n" + "procedura:"
+                + "\n" + "RLF PORTB, f"
+                + "\n" + "RLF PORTB, f"
+                + "\n" + "RETURN"
+                
+                + "\n" + ""
+                ;
         
-
-        
-        i += 4;
-        
-        // Interrupt vector
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0b01111000); 
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + regIntcon);
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETFIE);  
-        
-        i++;
-        i++;
-        
-        rom[0] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i);
-
-        
-        // Activete Timer prescaler, a set to 1:2
-        // chage Ram bank to 1 --> Set PS and PSA bits in Option reg to 0 --> chage Ram bank to 0
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BSF + (5 << 7) + regStatus);  // SetBit( regStatus, 5)
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0xF0);  // w =  0b11110000
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDWF + 0x80 + regOption);  // regStatus = regStatus & w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_BCF + (5 << 7) + regStatus);  // ClearBit( regStatus, 5)
-        
-        // Enable interrupts
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + 4);             // GOTO 4
-        
-        //  Set timer to 250
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 251); 
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + regTmr0);
-        
-        
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 8 + 2 +1);         // MOVLW 11     : w = 11
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ANDLW + 8 + 4 +2);         // ANDLW 14     : w & 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + regPortB);  // MOVWF 6, w   : RAM[6] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_CALL + i + 5);             // CALL func1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6        : RAM[6] = RAM[6] << 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_GOTO + i - 3);             // GOTO -3
-        i++;
-        i++;
-        i++;                                                                             // func1:
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6,f  : RAM[6] = RAM[6] >> 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RLF + 0x80 + regPortB);    // RLF 6,f  : RAM[6] = RAM[6] >> 1
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_RETURN);                   // RETURN
+        return ret;
     }
     
     private void PokusniProgramStari()
