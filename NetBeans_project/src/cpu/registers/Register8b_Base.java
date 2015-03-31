@@ -145,7 +145,7 @@ public abstract class Register8b_Base
     {
         if (k < 0 || k > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta k: " + k);
         
-        this.set( this.get() ^ k );
+        this.set( this.get() | k );
         
         return ( this.get() == 0);
     }
