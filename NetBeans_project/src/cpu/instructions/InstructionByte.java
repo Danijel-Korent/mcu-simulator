@@ -56,7 +56,7 @@ public class InstructionByte extends Instruction
         }
         
         
-        if (type == OPCODE_MOVWF)
+        if (type == (OPCODE_MOVWF & MASKA_INSTR_6))
         {
             registarDestination.set(registerFile.W);
         }
@@ -230,7 +230,7 @@ public class InstructionByte extends Instruction
     public String ispisi()
     {
         // ToDo: ispisati i destinaciju operacije
-        if (type == OPCODE_MOVWF) return "MOVWF " + registerAddress;
+        if (type == (OPCODE_MOVWF & MASKA_INSTR_6)) return "MOVWF " + registerAddress;
         else if (type == OPCODE_MOVF) return "MOVF " + registerAddress;
         else if (type == OPCODE_ADDWF) return "ADDWF " + registerAddress;
         else if (type == OPCODE_ANDWF ) return "ANDWF " + registerAddress;
@@ -241,9 +241,6 @@ public class InstructionByte extends Instruction
         else if (type == OPCODE_COMF ) return "COMF " + registerAddress;
         else if (type == OPCODE_SWAPF ) return "SWAPF " + registerAddress;
 
-
-
-        
         return "Nepoznata istrukcija!! PC = " + (registerFile.PC.get()-1) + " : Inst: " + opcode;
     }
     
