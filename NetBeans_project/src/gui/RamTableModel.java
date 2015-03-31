@@ -37,7 +37,7 @@ public class RamTableModel extends AbstractTableModel
     @Override
     public String getColumnName(int i) {
         if (i == 0) return "Adr.";
-        else return "+" + (i-1);
+        else return "  +" + (i-1);
     }
     
     @Override
