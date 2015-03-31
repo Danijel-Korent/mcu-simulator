@@ -453,6 +453,9 @@ public class App extends javax.swing.JFrame {
         kodTableModel.fireTableDataChanged();
         romTableModel.fireTableDataChanged();
         
+        // Auto-scrolling in code table
+        jTable2.scrollRectToVisible(jTable2.getCellRect( cpu.RegisterFile.PC.get() + 1, 0, true));
+        
         jLabel3.setText(Integer.toString(cpu.RegisterFile.PC.get()));
         jLabel4.setText(Integer.toString(cpu.RegisterFile.W.get()));
         jLabel10.setText(Integer.toString(cpu.RegisterFile.STATUS.get()));
