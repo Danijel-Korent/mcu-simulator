@@ -15,6 +15,8 @@ import static org.junit.Assert.*;
 
 import cpu.RegisterFileMemory;
 import cpu.StackMemory;
+import cpu.modules.InterruptController;
+import cpu.modules.Timer;
 
 /**
  *
@@ -22,11 +24,17 @@ import cpu.StackMemory;
  */
 public class InstructionByteTest 
 {
-    private final int bitD = 0x0080;
+    
+    private final int destinationW = 0x0;
+    private final int destinationF = 0x0080;
+    
+    private final int GPR_START = 0x0C;
+    private final int GPR_END   = 0x4F;
     
     private RegisterFileMemory RegisterFile;
     private StackMemory Stack;
     
+    // Konstruktor
     public InstructionByteTest() 
     {
     }
@@ -44,7 +52,10 @@ public class InstructionByteTest
     @Before
     public void setUp() 
     {
-        RegisterFile = new RegisterFileMemory();
+        InterruptController interruptController = new InterruptController();
+        Timer timerModule = new Timer( interruptController );
+        
+        RegisterFile = new RegisterFileMemory( timerModule, interruptController );
         Stack = new StackMemory(8);
         
         Instruction.setRegisterFile( RegisterFile );
@@ -62,25 +73,7 @@ public class InstructionByteTest
     @Test
     public void testIzvrsi() 
     {
-        /*
-        // byte-oriented instrukcije
-        public static final short OPCODE_ADDWF = 0x0700;
-        public static final short OPCODE_MOVF  = 0x0800;
-        public static final short OPCODE_MOVWF = 0x0000;
-        public static final short OPCODE_RLF   = 0x0D00;
-        public static final short OPCODE_RRF   = 0x0C00;
-        public static final short OPCODE_ANDWF = 0x0500;
-        public static final short OPCODE_IORWF = 0x0400;
-        public static final short OPCODE_XORWF = 0x0600;
-        public static final short OPCODE_CLR   = 0x0100;
-        public static final short OPCODE_COMF  = 0x0900;
-        public static final short OPCODE_SWAPF = 0x0E00;
-        public static final short OPCODE_SUBWF = 0x0200;
-        public static final short OPCODE_DECF   = 0x0300;
-        public static final short OPCODE_DECFSZ = 0x0B00;
-        public static final short OPCODE_INCF   = 0x0A00;
-        public static final short OPCODE_INCFSZ = 0x0F00;    
-        */
+
     }
 
     /**
@@ -91,23 +84,35 @@ public class InstructionByteTest
     {
         Instruction testInstr;
         
-        int fileAddress = 15;
+        int fileAddress = GPR_START;
         int fileVal = 10; 
         int regW = 5;
         
-        testInstr = Instruction.Instanciraj( Instruction.OPCODE_ADDWF + bitD + fileAddress );
+        
+        // Test with destination F
+        testInstr = Instruction.Instanciraj( Instruction.OPCODE_ADDWF + destinationF + fileAddress );
         
         RegisterFile.getRAM(fileAddress).set( fileVal );
         RegisterFile.W.set( regW );
         
         testInstr.izvrsi();
         
-        assertEquals( RegisterFile.PC.get() , 1);
-        assertEquals( RegisterFile.W.get() , regW);
-        assertEquals( RegisterFile.getRAM(fileAddress).get() , fileVal + regW);
+        assertEquals( 1, RegisterFile.PC.get());
+        assertEquals( regW, RegisterFile.W.get() );
+        assertEquals( fileVal + regW, RegisterFile.getRAM(fileAddress).get());
         
         
-        //assertEquals(expResult, result);
+        // Test with destination W
+        testInstr = Instruction.Instanciraj( Instruction.OPCODE_ADDWF + destinationW + fileAddress );
+        
+        RegisterFile.getRAM(fileAddress).set( fileVal );
+        RegisterFile.W.set( regW );
+        
+        testInstr.izvrsi();
+        
+        assertEquals( 2, RegisterFile.PC.get());
+        assertEquals( regW + fileVal, RegisterFile.W.get() );
+        assertEquals( fileVal, RegisterFile.getRAM(fileAddress).get());
     }
     
     @Test
