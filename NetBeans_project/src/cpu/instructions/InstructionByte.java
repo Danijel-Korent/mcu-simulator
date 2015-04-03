@@ -15,12 +15,9 @@ import cpu.registers.Register8b_Base;
  */
 public class InstructionByte extends Instruction
 {
-    public final int type;
+    private final int type;
     private final int registerAddress;
-    public final boolean destinationIsW;
-    
-    public Register8b_Base registarOperand;
-    public Register8b_Base registarDestination; 
+    private final boolean destinationIsW;
     
     public InstructionByte(int op) 
     {
@@ -28,30 +25,26 @@ public class InstructionByte extends Instruction
         type = opcode & MASKA_INSTR_6;
         registerAddress = opcode & MASKA_FILE_7;
         destinationIsW = ( 0 == (opcode & MASKA_INSTR_DEST) );
-             
-        if (destinationIsW )
-        {
-            registarDestination = cpu.getW();
-        }
-        else
-        {
-            registarOperand = cpu.getW();
-        }
     }
     
     @Override
     public void execute()
     {
+        Register8b_Base registarOperand;
+        Register8b_Base registarDestination; 
+        
         super.execute(); // uvecava PC
 
         // .getRAM mora bit pozvan kod svakog izvrsavanja zbog bankirane memorije
         if (destinationIsW )
         {
             registarOperand = cpu.getRam( registerAddress );
+            registarDestination = cpu.getW();
         }
         else
         {
             registarDestination = cpu.getRam( registerAddress );
+            registarOperand = cpu.getW();
         }
         
         

@@ -14,8 +14,8 @@ import cpu.registers.Flags;
  */
 public class InstructionLiteral extends Instruction
 {
-    public final int value;
-    public final int type;
+    private final int value;
+    private final int type;
     
     public InstructionLiteral(int op) 
     {

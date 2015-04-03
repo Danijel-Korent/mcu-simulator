@@ -12,8 +12,8 @@ package cpu.instructions;
  */
 public class InstructionControl extends Instruction
 {
-    public final int value;
-    public final int type;
+    private final int value;
+    private final int type;
     
     public InstructionControl(int op) 
     {

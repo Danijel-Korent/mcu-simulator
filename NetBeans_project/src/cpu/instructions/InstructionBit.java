@@ -13,10 +13,9 @@ import cpu.registers.Register8b_Base;
  */
 public class InstructionBit extends Instruction
 {
-    public int type;
-    public int bit;
+    private int type;
+    private int bit;
     private int registerAddress;
-    public Register8b_Base registarOperand;
 
     public InstructionBit(int op) 
     {
@@ -33,7 +32,7 @@ public class InstructionBit extends Instruction
     {
         super.execute(); 
         
-        registarOperand = cpu.getRam(registerAddress);
+        Register8b_Base registarOperand = cpu.getRam(registerAddress);
         
         if ( type == OPCODE_BCF)
         {
