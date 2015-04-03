@@ -1,5 +1,6 @@
 package cpu;
 
+import cpu.functionRegisters.RegisterPC;
 import cpu.registers.Register8b_Base;
 import cpu.instructions.Instruction;
 import cpu.modules.InterruptController;
@@ -18,7 +19,7 @@ import parser.Parser;
  *
  * @author Danijel Korent
  */
-public class CPU 
+public class CPU implements CpuExternalInterface
 {
     private static final short INT_VECTOR = 0x04;
     
@@ -31,8 +32,11 @@ public class CPU
     private final StackMemory       HwStack = new StackMemory(8);
     public final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule, interruptController);
     
+    private boolean isInIsr;
+    
     public CPU() 
     { 
+        isInIsr = false;
         Instruction.setRegisterFile(RegisterFile);
         Instruction.setStack(HwStack);
         
@@ -51,6 +55,8 @@ public class CPU
         
         ParseAssemblerCode( AsmCode );
     }
+    
+    /******************************** Public methods ********************************************************************************************/
     
     public Register8b_Base getRAM(int adr)
     {
@@ -73,6 +79,7 @@ public class CPU
             HwStack.push( RegisterFile.PC.get() );
             RegisterFile.PC.set( INT_VECTOR );
             interruptController.setGlobalEnable( false );
+            isInIsr = true;
         }
         
         rom[ RegisterFile.PC.get() ].execute();
@@ -98,8 +105,78 @@ public class CPU
             rom[i++] = Instruction.getInstance( opcode );
         }
     }
+
+    /******************************** CpuExternalInterface implementation ***********************************************************************/
     
-    /**************************************************************************************************************/
+    @Override
+    public Instruction getRom(int address) 
+    {
+        return rom[address];
+    }
+
+    @Override
+    public int getActiveBank() 
+    {
+        if (RegisterFile.STATUS.getRP0())
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    @Override
+    public boolean isIsr() 
+    {
+        return isInIsr;
+    }
+
+    @Override
+    public void pushStack(int val) 
+    {
+        HwStack.push( val );
+    }
+
+    @Override
+    public int popStack() 
+    {
+        return HwStack.pop();
+    }
+
+    @Override
+    public Register8b_Base getRam(int address) 
+    {
+        return RegisterFile.getRam( address );
+    }
+
+    @Override
+    public RegisterPC getPc()
+    {
+        return RegisterFile.PC;
+    }
+
+    @Override
+    public Register8b_Base getW() 
+    {
+        return RegisterFile.W;
+    }
+
+    @Override
+    public Register8b_Base getStatus() 
+    {
+        return RegisterFile.STATUS;
+    }
+
+    @Override
+    public void enableGlobalInterrupts() 
+    {
+        interruptController.setGlobalEnable( true );
+        isInIsr = false;
+    }
+    
+    /******************************** Private Methods *******************************************************************************************/
     
     private String PokusniProgramParser()
     {
@@ -187,74 +264,5 @@ public class CPU
         
         return ret;
     }
-    
-    private void PokusniProgramStari()
-    {
-        int i = 0;
-        rom[i++] = Instruction.getInstance(0);
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 133);       // MOVLW 133     : w = 133
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 0);       // MOVLW 0     : w = 0
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 0);        // MOVWF 4      : RAM[0] = w
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 127-32-1);       // MOVLW 14     : w = 14
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 6);        // MOVWF 4      : RAM[4] = w
-        
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 14);       // MOVLW 14     : w = 14
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 64);       // MOVLW 64     : w = 64
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 15);       // MOVWF 15     : RAM[15] = w
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVF + 0);    // MOVF 0, w   A: w = RAM[0]
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_ADDWF + 15);   // ADDWF 15, w  : w = w + RAM[15] 
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 14);       // MOVWF 14     : RAM[14] = w
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 5);         
-        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 2);         // GOTO 5       : GOTO A
-    }
-    
-    /*
-    public void ispisiStanje()
-    {
-        System.out.println("\nPC = " + PC + " | W = " + Integer.toHexString(w.get()) );
-        System.out.println("Iduca instrukcija: " + instrukcija.ispisi(ROM[PC]));
-    }
-    
-    
-    
-    public void ispisiInstrukcije(int brojRedaka)
-    {
-        for(int i = 0; i < brojRedaka; i++)
-        {
-            System.out.println(Integer.toHexString(i) + " : " + instrukcija.ispisi(ROM[i]));
-        }
-    }
-    
-    public void ispisiROM(int brojRedaka)
-    {
-        System.out.println("\nIspis ROM-a");
-        System.out.println("Adr\t+0\t+1\t+2\t+3\t+4\t+5\t+6\t+7");
-        
-        for(int i = 0; i < 1024/8 && i < brojRedaka; i++)
-        {
-            System.out.print( i*8 + "\t");
-            for(int x = 0; x < 8; x++)
-                System.out.print(Integer.toHexString(ROM[i*8+x]) + "\t");
-            System.out.println();
-        }
-    }
-   
-    
-    public void ispisiRAM(int brojRedaka)
-    {
-        System.out.println("\nIspis RAM-a");
-        System.out.println("Adr\t+0\t+1\t+2\t+3\t+4\t+5\t+6\t+7");
-        
-        for(int i = 0; i < 128/8 && i < brojRedaka; i++)
-        {
-            System.out.print( i*8 + "\t");
-            for(int x = 0; x < 8; x++)
-                System.out.print(Integer.toHexString( (RAM[i*8+x]).get() ) + "\t");
-            System.out.println();
-        }
-    }
-    */
 }
 
