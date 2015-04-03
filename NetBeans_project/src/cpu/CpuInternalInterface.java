@@ -7,6 +7,7 @@ package cpu;
 
 import cpu.functionRegisters.RegisterPC;
 import cpu.registers.Register8b_Base;
+import cpu.registers.RegisterStatus;
 
 /**
  *
@@ -19,7 +20,7 @@ public interface CpuInternalInterface
     
     Register8b_Base getRam( int address );
     Register8b_Base getW();
-    Register8b_Base getStatus();
+    RegisterStatus getStatus();
     RegisterPC getPc();
     
     void enableGlobalInterrupts();

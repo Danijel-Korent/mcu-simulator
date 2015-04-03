@@ -1,7 +1,7 @@
 package gui;
 
 
-import cpu.CPU;
+import cpu.CpuExternalInterface;
 import javax.swing.table.AbstractTableModel;
 
 /*
@@ -16,9 +16,9 @@ import javax.swing.table.AbstractTableModel;
  */
 public class CodeTableModel extends AbstractTableModel 
 {
-    CPU cpu;
+    CpuExternalInterface cpu;
 
-    public CodeTableModel(CPU cpu) {
+    public CodeTableModel(CpuExternalInterface cpu) {
         super();
         this.cpu = cpu;
     }
@@ -43,7 +43,7 @@ public class CodeTableModel extends AbstractTableModel
     @Override
     public Object getValueAt(int i, int i1) {
         if (i1 == 0) return i;
-        else if (i1 == 2) return cpu.ispisiInstrukciju(i);
+        else if (i1 == 2) return cpu.getRom(i).getAsmCode();
         else return "";
     }
     

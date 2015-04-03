@@ -5,6 +5,7 @@ import cpu.registers.Register8b_Base;
 import cpu.instructions.Instruction;
 import cpu.modules.InterruptController;
 import cpu.modules.Timer;
+import cpu.registers.RegisterStatus;
 import java.util.ArrayList;
 import parser.AsmInstruction;
 import parser.Parser;
@@ -30,7 +31,7 @@ public class CPU implements CpuExternalInterface
     // Memory
     private Instruction[]           rom = new Instruction[1024];
     private final StackMemory       HwStack = new StackMemory(8);
-    public final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule, interruptController);
+    private final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule, interruptController);
     
     private boolean isInIsr;
     
@@ -46,7 +47,6 @@ public class CPU implements CpuExternalInterface
             rom[i] = Instruction.getInstance(0);
         }
         
-        
         // Dodavanje pokusnog programa u programsku memoriju
         String AsmCode = "";
        
@@ -58,19 +58,7 @@ public class CPU implements CpuExternalInterface
     
     /******************************** Public methods ********************************************************************************************/
     
-    public Register8b_Base getRAM(int adr)
-    {
-        return RegisterFile.getRam(adr);
-    }
-    
-    
-    public short getROM(int adr)
-    {
-        return (short)rom[adr].opcode;
-    }
-    
-    
-    public void ExecuteInstruction()
+    public void executeInstruction()
     {
         timerModule.onTick();
         
@@ -83,12 +71,6 @@ public class CPU implements CpuExternalInterface
         }
         
         rom[ RegisterFile.PC.get() ].execute();
-    }
-    
-    
-    public String ispisiInstrukciju(int adr)
-    {
-        return rom[adr].getAsmCode();
     }
     
     public void ParseAssemblerCode( String text )
@@ -164,7 +146,7 @@ public class CPU implements CpuExternalInterface
     }
 
     @Override
-    public Register8b_Base getStatus() 
+    public RegisterStatus getStatus() 
     {
         return RegisterFile.STATUS;
     }

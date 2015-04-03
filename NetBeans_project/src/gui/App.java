@@ -2,6 +2,9 @@ package gui;
 
 
 import cpu.CPU;
+import cpu.CpuExternalInterface;
+import cpu.registers.Register8b_Base;
+import cpu.registers.RegisterStatus;
 import java.awt.Color;
 import java.util.Vector;
 import javax.swing.JLabel;
@@ -26,9 +29,9 @@ public class App extends javax.swing.JFrame {
     CPU cpu = new CPU();
     SevenSegDisplay testDisplay;
     
-    RomTableModel romTableModel = new RomTableModel(cpu);
-    RamTableModel ramTableModel = new RamTableModel(cpu);
-    CodeTableModel kodTableModel = new CodeTableModel(cpu);
+    RomTableModel romTableModel = new RomTableModel( (CpuExternalInterface)cpu );
+    RamTableModel ramTableModel = new RamTableModel( (CpuExternalInterface)cpu );
+    CodeTableModel kodTableModel = new CodeTableModel( (CpuExternalInterface)cpu );
     
     public App() 
     {
@@ -44,17 +47,17 @@ public class App extends javax.swing.JFrame {
         
         for (int x = 0; x < kodTableModel.getColumnCount(); x++)
         {
-           jTable2.getColumnModel().getColumn(x).setCellRenderer(new CodeTableCellRenderer(cpu));
+           jTable2.getColumnModel().getColumn(x).setCellRenderer(new CodeTableCellRenderer( (CpuExternalInterface)cpu ));
         }
         
         for (int x = 0; x < romTableModel.getColumnCount(); x++)
         {
-           jTable1.getColumnModel().getColumn(x).setCellRenderer(new RomTableCellRenderer(cpu));
+           jTable1.getColumnModel().getColumn(x).setCellRenderer(new RomTableCellRenderer( (CpuExternalInterface)cpu ));
         }
         
         for (int x = 0; x < ramTableModel.getColumnCount(); x++)
         {
-           jTable3.getColumnModel().getColumn(x).setCellRenderer(new RamTableCellRenderer(cpu));
+           jTable3.getColumnModel().getColumn(x).setCellRenderer(new RamTableCellRenderer( (CpuExternalInterface)cpu ));
         }
 
     }
@@ -442,10 +445,24 @@ public class App extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-        cpu.ExecuteInstruction();
+        /************ Execute    **********/
+        
+        cpu.executeInstruction();
+        
+        
+        
+        /************ Update GUI **********/
+        final int PORTA = 0x05;
+        final int PORTB = 0x06;
+        
+        RegisterStatus regStatus = cpu.getStatus();
+        
+        // Todo: Add interface methods for getim PORT regs, because getRam checks banking
+        Register8b_Base regPortA = cpu.getRam( PORTA );
+        Register8b_Base regPortB = cpu.getRam( PORTB );
         
         // ToDo: hardcodirano dok se ne implementira hwpin interface
-        testDisplay.set( cpu.RegisterFile.PORTB.get() & 0x0F );
+        testDisplay.set( regPortB.get() & 0x0F );
         jPanelPeripherals.repaint();
         
         
@@ -454,32 +471,32 @@ public class App extends javax.swing.JFrame {
         romTableModel.fireTableDataChanged();
         
         // Auto-scrolling in code table
-        jTable2.scrollRectToVisible(jTable2.getCellRect( cpu.RegisterFile.PC.get(), 0, true));
+        jTable2.scrollRectToVisible(jTable2.getCellRect( cpu.getPc().get(), 0, true));
         
-        jLabel3.setText(Integer.toString(cpu.RegisterFile.PC.get()));
-        jLabel4.setText(Integer.toString(cpu.RegisterFile.W.get()));
-        jLabel10.setText(Integer.toString(cpu.RegisterFile.STATUS.get()));
+        jLabel3.setText(Integer.toString( cpu.getPc().get() ));
+        jLabel4.setText(Integer.toString( cpu.getW().get() ));
+        jLabel10.setText(Integer.toString( regStatus.get() ));
         
        
         // Postavljanje status zastovica
         Color zelena = new Color(0,128,0);
         
-        if (cpu.RegisterFile.STATUS.getC())
+        if ( regStatus.getC())
             jLabel5.setForeground(zelena);
         else 
             jLabel5.setForeground(Color.RED);
         
-        if (cpu.RegisterFile.STATUS.getDC())
+        if ( regStatus.getDC())
             jLabel6.setForeground(zelena);
         else 
             jLabel6.setForeground(Color.RED);
         
-        if (cpu.RegisterFile.STATUS.getZ())
+        if ( regStatus.getZ())
             jLabel9.setForeground(zelena);
         else 
             jLabel9.setForeground(Color.RED);  
         
-        if (cpu.RegisterFile.STATUS.getRP0())
+        if ( regStatus.getRP0())
             jLabel8.setForeground(zelena);
         else 
             jLabel8.setForeground(Color.RED);    
@@ -508,7 +525,7 @@ public class App extends javax.swing.JFrame {
         
         for(int i = 0; i < 8; i++)
         {
-            if (cpu.RegisterFile.PORTB.getBit(i))
+            if ( regPortB.getBit(i))
             {
                 ((JLabel)portB.get(i)).setForeground(zelena);
                 ((JLabel)portB.get(i)).setText("1");
@@ -519,7 +536,7 @@ public class App extends javax.swing.JFrame {
                 ((JLabel)portB.get(i)).setText("0");
             }
             
-            if (cpu.RegisterFile.PORTA.getBit(i))
+            if ( regPortA.getBit(i))
             {
                 ((JLabel)portA.get(i)).setForeground(zelena);
                 ((JLabel)portA.get(i)).setText("1");

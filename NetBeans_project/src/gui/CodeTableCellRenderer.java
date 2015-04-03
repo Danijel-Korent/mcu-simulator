@@ -1,7 +1,7 @@
 package gui;
 
 
-import cpu.CPU;
+import cpu.CpuExternalInterface;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
@@ -21,11 +21,11 @@ import javax.swing.table.TableCellRenderer;
 public class CodeTableCellRenderer extends JLabel
 implements TableCellRenderer {
 
-    CPU cpu;
+    CpuExternalInterface cpu;
     
     Color zuta = new Color(22, 55, 0);
 
-    public CodeTableCellRenderer(CPU cpu) 
+    public CodeTableCellRenderer(CpuExternalInterface cpu) 
     {
         super();
         this.cpu = cpu;
@@ -38,7 +38,7 @@ implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
     {
       setBackground(Color.white);
-      if (row == cpu.RegisterFile.PC.get()) setBackground(Color.yellow);
+      if (row == cpu.getPc().get()) setBackground(Color.yellow);
       //setHorizontalAlignment(JLabel.CENTER);
       String str = (value == null) ? "" : value.toString();
       setText( " " + str );

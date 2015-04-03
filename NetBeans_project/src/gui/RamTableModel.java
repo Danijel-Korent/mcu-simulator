@@ -1,7 +1,7 @@
 package gui;
 
 
-import cpu.CPU;
+import cpu.CpuExternalInterface;
 import javax.swing.table.AbstractTableModel;
 
 /*
@@ -16,9 +16,9 @@ import javax.swing.table.AbstractTableModel;
  */
 public class RamTableModel extends AbstractTableModel 
 {
-    CPU cpu;
+    CpuExternalInterface cpu;
 
-    public RamTableModel(CPU cpu) {
+    public RamTableModel(CpuExternalInterface cpu) {
         super();
         this.cpu = cpu;
     }
@@ -46,13 +46,13 @@ public class RamTableModel extends AbstractTableModel
         if (i1 == 0)
         {
             int val = i*8;
-            if (cpu.RegisterFile.STATUS.getRP0())
+            if ( cpu.getStatus().getRP0() )
             {
                 val += 0x80;
             }
             return Integer.toHexString(val);
         }
 
-        return Integer.toHexString( cpu.getRAM( (byte)(i*8 + i1-1) ).get());
+        return Integer.toHexString( cpu.getRam( (byte)(i*8 + i1-1) ).get());
     }  
 }

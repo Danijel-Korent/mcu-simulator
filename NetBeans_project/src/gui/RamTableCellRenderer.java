@@ -5,7 +5,7 @@
  */
 package gui;
 
-import cpu.CPU;
+import cpu.CpuExternalInterface;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -20,11 +20,11 @@ import javax.swing.table.TableCellRenderer;
 public class RamTableCellRenderer extends JLabel
 implements TableCellRenderer 
 {
-    CPU cpu;
+    CpuExternalInterface cpu;
     
     Color zuta = new Color(22, 55, 0);
 
-    public RamTableCellRenderer(CPU cpu) 
+    public RamTableCellRenderer(CpuExternalInterface cpu) 
     {
         super();
         this.cpu = cpu;
@@ -97,7 +97,7 @@ implements TableCellRenderer
         {
             this.setFont( this.getFont().deriveFont(Font.BOLD) );
             
-            if( cpu.RegisterFile.STATUS.getRP0())
+            if( cpu.getActiveBank()== 1)
             {
                 setBackground(new Color(230,230,255));
             }

@@ -1,7 +1,7 @@
 package gui;
 
 
-import cpu.CPU;
+import cpu.CpuExternalInterface;
 import javax.swing.table.AbstractTableModel;
 
 /*
@@ -16,9 +16,9 @@ import javax.swing.table.AbstractTableModel;
  */
 public class RomTableModel extends AbstractTableModel 
 {
-    CPU cpu;
+    CpuExternalInterface cpu;
 
-    public RomTableModel(CPU cpu) {
+    public RomTableModel(CpuExternalInterface cpu) {
         super();
         this.cpu = cpu;
     }
@@ -44,7 +44,7 @@ public class RomTableModel extends AbstractTableModel
     @Override
     public Object getValueAt(int i, int i1) {
         if (i1 == 0) return Integer.toHexString(i*8);
-        return Integer.toHexString(cpu.getROM( i*8 + i1-1 ));
+        return Integer.toHexString( cpu.getRom( i*8 + i1-1 ).opcode );
     }
     
 }
