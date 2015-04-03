@@ -6,6 +6,9 @@
 
 package cpu.instructions;
 
+import cpu.CPU;
+import cpu.functionRegisters.RegisterPC;
+import cpu.registers.Register8b_Base;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,10 +16,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import cpu.RegisterFileMemory;
-import cpu.StackMemory;
-import cpu.modules.InterruptController;
-import cpu.modules.Timer;
 
 /**
  *
@@ -31,8 +30,9 @@ public class InstructionByteTest
     private final int GPR_START = 0x0C;
     private final int GPR_END   = 0x4F;
     
-    private RegisterFileMemory RegisterFile;
-    private StackMemory Stack;
+    private CPU cpu;
+    private RegisterPC regPc;
+    private Register8b_Base regW;
     
     // Konstruktor
     public InstructionByteTest() 
@@ -51,15 +51,13 @@ public class InstructionByteTest
     
     @Before
     public void setUp() 
-    {
-        InterruptController interruptController = new InterruptController();
-        Timer timerModule = new Timer( interruptController );
+    {   
+        cpu = new CPU();
         
-        RegisterFile = new RegisterFileMemory( timerModule, interruptController );
-        Stack = new StackMemory(8);
+        regPc = cpu.getPc();
+        regW  = cpu.getW();
         
-        Instruction.setRegisterFile( RegisterFile );
-        Instruction.setStack( Stack );
+        Instruction.setCpuInterface( cpu );
     }
     
     @After
@@ -85,34 +83,33 @@ public class InstructionByteTest
         Instruction testInstr;
         
         int fileAddress = GPR_START;
-        int fileVal = 10; 
-        int regW = 5;
-        
+        int valueFileReg = 10; 
+        int valueRegW = 5;
         
         // Test with destination F
         testInstr = Instruction.getInstance( Instruction.OPCODE_ADDWF + destinationF + fileAddress );
         
-        RegisterFile.getRam(fileAddress).set( fileVal );
-        RegisterFile.W.set( regW );
+        cpu.getRam(fileAddress).set(valueFileReg );
+        cpu.getW().set(valueRegW );
         
         testInstr.execute();
         
-        assertEquals( 1, RegisterFile.PC.get());
-        assertEquals( regW, RegisterFile.W.get() );
-        assertEquals( fileVal + regW, RegisterFile.getRam(fileAddress).get());
+        assertEquals( 1, cpu.getPc().get());
+        assertEquals(valueRegW, regW.get() );
+        assertEquals(valueFileReg + valueRegW, cpu.getRam(fileAddress).get());
         
         
         // Test with destination W
         testInstr = Instruction.getInstance( Instruction.OPCODE_ADDWF + destinationW + fileAddress );
         
-        RegisterFile.getRam(fileAddress).set( fileVal );
-        RegisterFile.W.set( regW );
+        cpu.getRam(fileAddress).set(valueFileReg );
+        regW.set(valueRegW );
         
         testInstr.execute();
         
-        assertEquals( 2, RegisterFile.PC.get());
-        assertEquals( regW + fileVal, RegisterFile.W.get() );
-        assertEquals( fileVal, RegisterFile.getRam(fileAddress).get());
+        assertEquals( 2, regPc.get());
+        assertEquals(valueRegW + valueFileReg, regW.get() );
+        assertEquals(valueFileReg, cpu.getRam(fileAddress).get());
     }
     
     @Test
