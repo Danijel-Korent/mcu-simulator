@@ -33,7 +33,7 @@ public class InstructionBit extends Instruction
     {
         super.execute(); 
         
-        registarOperand = registerFile.getRam(registerAddress);
+        registarOperand = cpu.getRam(registerAddress);
         
         if ( type == OPCODE_BCF)
         {
@@ -47,14 +47,14 @@ public class InstructionBit extends Instruction
         {
             if ( false == registarOperand.getBit(bit))
             {
-                registerFile.PC.inc();
+                cpu.getPc().inc();
             }
         }
         else if (type == OPCODE_BTFSS)
         {
             if ( true == registarOperand.getBit(bit))
             {
-                registerFile.PC.inc();
+                cpu.getPc().inc();
             }
         }
     }
@@ -65,7 +65,7 @@ public class InstructionBit extends Instruction
         if (type == OPCODE_BCF)      return "BCF " + registerAddress + ", " + bit;
         else if (type == OPCODE_BSF) return "BSF " + registerAddress + ", " + bit;
         
-        return "Nepoznata istrukcija!! PC = " + (registerFile.PC.get()-1) + " : Inst: " + opcode;
+        return "Nepoznata istrukcija!! PC = " + (cpu.getPc().get()-1) + " : Inst: " + opcode;
     }
     
 }

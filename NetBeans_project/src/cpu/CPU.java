@@ -38,8 +38,8 @@ public class CPU implements CpuExternalInterface
     public CPU() 
     { 
         isInIsr = false;
-        Instruction.setRegisterFile(RegisterFile);
-        Instruction.setStack(HwStack);
+
+        Instruction.setCpuInterface( (CpuInternalInterface)this );
         
         // popunjavanje programske memorije
         for(int i=0; i < 1024; i++) 
@@ -75,7 +75,7 @@ public class CPU implements CpuExternalInterface
     
     public void ParseAssemblerCode( String text )
     {
-        ArrayList<AsmInstruction> instructions = new ArrayList<>();
+        ArrayList<AsmInstruction> instructions;
         
         instructions = Parser.Parse( text );
 

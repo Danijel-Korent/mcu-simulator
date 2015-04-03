@@ -31,11 +31,11 @@ public class InstructionByte extends Instruction
              
         if (destinationIsW )
         {
-            registarDestination = registerFile.W;
+            registarDestination = cpu.getW();
         }
         else
         {
-            registarOperand = registerFile.W;
+            registarOperand = cpu.getW();
         }
     }
     
@@ -47,41 +47,41 @@ public class InstructionByte extends Instruction
         // .getRAM mora bit pozvan kod svakog izvrsavanja zbog bankirane memorije
         if (destinationIsW )
         {
-            registarOperand = registerFile.getRam(registerAddress);
+            registarOperand = cpu.getRam( registerAddress );
         }
         else
         {
-            registarDestination = registerFile.getRam(registerAddress);
+            registarDestination = cpu.getRam( registerAddress );
         }
         
         
         if (type == (OPCODE_MOVWF & MASKA_INSTR_6))
         {
-            registarDestination.set(registerFile.W);
+            registarDestination.set( cpu.getW() );
         }
         else if (type == OPCODE_ADDWF)
         {        
             Flags zastavice = registarDestination.add( registarOperand );
 
-            registerFile.STATUS.postaviZastavice( zastavice ); 
+            cpu.getStatus().postaviZastavice( zastavice ); 
         }
         else if (type == OPCODE_SUBWF)
         {        
             Flags zastavice = registarDestination.sub( registarOperand );
 
-            registerFile.STATUS.postaviZastavice( zastavice ); 
+            cpu.getStatus().postaviZastavice( zastavice ); 
         }
         else if ( type == OPCODE_MOVF )
         {
-            registarDestination.set(registerFile.getRam(registerAddress));
+            registarDestination.set( cpu.getRam(registerAddress) );
             
             if (registarDestination.get() == 0)
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else  if (type == OPCODE_ANDWF)
@@ -90,11 +90,11 @@ public class InstructionByte extends Instruction
             
             if ( newZ )
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else if (type == OPCODE_IORWF)
@@ -103,11 +103,11 @@ public class InstructionByte extends Instruction
             
             if ( newZ )
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else if (type == OPCODE_XORWF)
@@ -116,11 +116,11 @@ public class InstructionByte extends Instruction
             
             if ( newZ )
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else
@@ -132,28 +132,28 @@ public class InstructionByte extends Instruction
 
             if ( type ==  OPCODE_RLF)
             {
-                boolean newC = registarDestination.rotateLeft( registerFile.STATUS.getC() );
+                boolean newC = registarDestination.rotateLeft( cpu.getStatus().getC() );
 
                 if ( newC )
                 {
-                    registerFile.STATUS.setC();
+                    cpu.getStatus().setC();
                 }
                 else
                 {
-                    registerFile.STATUS.clearC();
+                    cpu.getStatus().clearC();
                 }
             } 
             else if ( type ==  OPCODE_RRF)
             {
-                boolean newC = registarDestination.retateRight( registerFile.STATUS.getC() );
+                boolean newC = registarDestination.retateRight( cpu.getStatus().getC() );
 
                 if ( newC )
                 {
-                    registerFile.STATUS.setC();
+                    cpu.getStatus().setC();
                 }
                 else
                 {
-                    registerFile.STATUS.clearC();
+                    cpu.getStatus().clearC();
                 }
             }
             else if ( type ==  OPCODE_COMF)
@@ -162,11 +162,11 @@ public class InstructionByte extends Instruction
 
                 if ( newZ )
                  {
-                     registerFile.STATUS.setZ();
+                     cpu.getStatus().setZ();
                  }
                  else 
                  {
-                     registerFile.STATUS.clearZ();
+                     cpu.getStatus().clearZ();
                  }
             }
             else if ( type ==  OPCODE_SWAPF)
@@ -179,11 +179,11 @@ public class InstructionByte extends Instruction
 
                 if ( 0 == registarDestination.get() )
                 {
-                    registerFile.STATUS.setZ();
+                    cpu.getStatus().setZ();
                 }
                 else 
                 {
-                    registerFile.STATUS.clearZ();
+                    cpu.getStatus().clearZ();
                 }
             }
             else if ( type ==  OPCODE_INCF)
@@ -192,11 +192,11 @@ public class InstructionByte extends Instruction
 
                 if ( 0 == registarDestination.get() )
                 {
-                    registerFile.STATUS.setZ();
+                    cpu.getStatus().setZ();
                 }
                 else 
                 {
-                    registerFile.STATUS.clearZ();
+                    cpu.getStatus().clearZ();
                 }
             }
             else if ( type ==  OPCODE_DECFSZ)
@@ -205,7 +205,7 @@ public class InstructionByte extends Instruction
 
                 if ( 0 == registarDestination.get() )
                 {
-                    registerFile.PC.inc();
+                    cpu.getPc().inc();
                 }
             }
             else if ( type ==  OPCODE_INCFSZ)
@@ -214,13 +214,13 @@ public class InstructionByte extends Instruction
 
                 if ( 0 == registarDestination.get() )
                 {
-                    registerFile.PC.inc();
+                    cpu.getPc().inc();
                 }
             }  
             else if ( type ==  OPCODE_CLR)
             {
                 registarDestination.set(0);
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }  
         }
     }
@@ -240,7 +240,7 @@ public class InstructionByte extends Instruction
         else if (type == OPCODE_COMF ) return "COMF " + registerAddress;
         else if (type == OPCODE_SWAPF ) return "SWAPF " + registerAddress;
 
-        return "Nepoznata istrukcija!! PC = " + (registerFile.PC.get()-1) + " : Inst: " + opcode;
+        return "Nepoznata istrukcija!! PC = " + ( cpu.getPc().get()-1) + " : Inst: " + opcode;
     }
     
 }

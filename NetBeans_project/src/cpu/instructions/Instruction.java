@@ -1,5 +1,6 @@
 package cpu.instructions;
 
+import cpu.CpuInternalInterface;
 import cpu.RegisterFileMemory;
 import cpu.StackMemory;
 
@@ -75,9 +76,8 @@ public class Instruction
     public static final short OPCODE_SLEEP  = 0x0063;
     public static final short OPCODE_CLRWDT = 0x0064;
     
+    protected static CpuInternalInterface cpu;
     
-    protected static RegisterFileMemory registerFile;
-    protected static StackMemory stack;
     public final int opcode;
     
     public Instruction(int op) 
@@ -87,7 +87,7 @@ public class Instruction
     
     public void execute()
     {
-        registerFile.PC.inc();
+        cpu.getPc().inc();
     }
     
     public String getAsmCode()
@@ -110,16 +110,10 @@ public class Instruction
         else if ( op < 0x4000 )return new InstructionLiteral(op);
         else throw new IllegalArgumentException("Nedopustena vrijednost opcode-a: " + op);
     }
-    
-    public static void setRegisterFile(RegisterFileMemory c)
+   
+    public static void setCpuInterface( CpuInternalInterface c )
     {
-        registerFile = c;
+        cpu = c;
     }
-    
-    public static void setStack(StackMemory s)
-    {
-        stack = s;
-    }
-    
 }
 

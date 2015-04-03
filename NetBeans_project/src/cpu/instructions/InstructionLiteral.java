@@ -32,63 +32,63 @@ public class InstructionLiteral extends Instruction
         
         if (type == OPCODE_MOVLW) 
         {
-            registerFile.W.set(value);
+            cpu.getW().set(value);
         }
         else  if (type == OPCODE_ANDLW)
         {
-            boolean newZ = registerFile.W.logAnd(value);
+            boolean newZ = cpu.getW().logAnd(value);
             
             if ( newZ )
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else if (type == OPCODE_IORLW)
         {
-            boolean newZ = registerFile.W.logOr(value);
+            boolean newZ = cpu.getW().logOr(value);
             
             if ( newZ )
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else if (type == OPCODE_XORLW)
         {
-            boolean newZ = registerFile.W.logXor(value);
+            boolean newZ = cpu.getW().logXor(value);
             
             if ( newZ )
             {
-                registerFile.STATUS.setZ();
+                cpu.getStatus().setZ();
             }
             else 
             {
-                registerFile.STATUS.clearZ();
+                cpu.getStatus().clearZ();
             }
         }
         else if (type == OPCODE_ADDLW)
         {
-            Flags zastavice = registerFile.W.add(value );
+            Flags zastavice = cpu.getW().add( value );
 
-            registerFile.STATUS.postaviZastavice( zastavice ); 
+            cpu.getStatus().postaviZastavice( zastavice ); 
         }
         else if (type == OPCODE_SUBLW)
         {
-            Flags zastavice = registerFile.W.sub(value );
+            Flags zastavice = cpu.getW().sub(value );
 
-            registerFile.STATUS.postaviZastavice( zastavice ); 
+            cpu.getStatus().postaviZastavice( zastavice ); 
         }
         else if (type == OPCODE_RETLW)
         {
-            registerFile.W.set(value);
-            registerFile.PC.set( stack.pop() );
+            cpu.getW().set( value );
+            cpu.getPc().set( cpu.popStack() );
         }
     }
     
@@ -104,7 +104,7 @@ public class InstructionLiteral extends Instruction
         else if (type == OPCODE_RETLW ) return "RETLW " + value;
 
         
-        return "Nepoznata LIT istrukcija!! PC = " + (registerFile.PC.get()-1) + " : Inst: " + opcode;
+        return "Nepoznata LIT istrukcija!! PC = " + (cpu.getPc().get()-1) + " : Inst: " + opcode;
     }
     
 }

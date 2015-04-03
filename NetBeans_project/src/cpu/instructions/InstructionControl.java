@@ -48,21 +48,21 @@ public class InstructionControl extends Instruction
             // Datasheet, str.7 : 
             //The upper byte of the program counter is not directly accessible. PCLATH is a slave register for PC<12:8>. The contents
             // of PCLATH can be transferred to the upper byte of the program counter, but the contents of PC<12:8> are never transferred to PCLATH.
-            registerFile.PC.set(value);
+            cpu.getPc().set(value);
         }
         else if (type == OPCODE_CALL)
         {
-            stack.push( registerFile.PC.get() );
-            registerFile.PC.set(value );
+            cpu.pushStack( cpu.getPc().get() );
+            cpu.getPc().set(value );
         }
         else if (type == OPCODE_RETURN)
         {
-            registerFile.PC.set( stack.pop() );
+            cpu.getPc().set( cpu.popStack() );
         }
         else if (type == OPCODE_RETFIE)
         {
-            registerFile.PC.set( stack.pop() );
-            registerFile.getRam( 0x0B ).setBit( 7 );
+            cpu.getPc().set( cpu.popStack() );
+            cpu.getRam( 0x0B ).setBit( 7 );
         }
     }
     
