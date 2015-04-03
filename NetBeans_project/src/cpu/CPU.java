@@ -25,27 +25,23 @@ public class CPU implements CpuExternalInterface
     private static final short INT_VECTOR = 0x04;
     
     // Modules
-    private final InterruptController interruptController = new InterruptController();
-    private final Timer timerModule = new Timer(interruptController);
+    private InterruptController interruptController;
+    private Timer timerModule;
     
     // Memory
-    private Instruction[]           rom = new Instruction[1024];
-    private final StackMemory       HwStack = new StackMemory(8);
-    private final RegisterFileMemory RegisterFile = new RegisterFileMemory(timerModule, interruptController);
+    private StackMemory HwStack;
+    private RegisterFileMemory RegisterFile;
+    private Instruction[] rom = new Instruction[1024];
     
     private boolean isInIsr;
     
     public CPU() 
     { 
-        isInIsr = false;
-
+        clearRom();
+        reset();
+        
         Instruction.setCpuInterface( (CpuInternalInterface)this );
         
-        // popunjavanje programske memorije
-        for(int i=0; i < 1024; i++) 
-        {
-            rom[i] = Instruction.getInstance(0);
-        }
         
         // Dodavanje pokusnog programa u programsku memoriju
         String AsmCode = "";
@@ -57,6 +53,25 @@ public class CPU implements CpuExternalInterface
     }
     
     /******************************** Public methods ********************************************************************************************/
+    
+    public final void reset()
+    {
+        isInIsr = false;
+        
+        interruptController = new InterruptController();
+        timerModule = new Timer(interruptController);
+        HwStack = new StackMemory(8);
+        RegisterFile = new RegisterFileMemory(timerModule, interruptController);
+    }
+    
+    public final void clearRom()
+    {
+          // popunjavanje programske memorije
+        for(int i=0; i < 1024; i++) 
+        {
+            rom[i] = Instruction.getInstance(0);
+        }
+    }
     
     public void executeInstruction()
     {
@@ -75,9 +90,9 @@ public class CPU implements CpuExternalInterface
     
     public void ParseAssemblerCode( String text )
     {
-        ArrayList<AsmInstruction> instructions;
+        ArrayList<AsmInstruction> instructions = Parser.Parse( text );
         
-        instructions = Parser.Parse( text );
+        clearRom();
 
         int i = 0;
         for( AsmInstruction instruction : instructions )
