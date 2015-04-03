@@ -85,19 +85,19 @@ public class Instruction
         this.opcode = op;
     }
     
-    public void izvrsi()
+    public void execute()
     {
         registerFile.PC.inc();
     }
     
-    public String ispisi()
+    public String getAsmCode()
     {
         return "Unknown";
     }
     
     // *** Static Metode ***
     
-    public static Instruction Instanciraj(int op)
+    public static Instruction getInstance(int op)
     {
         if ( op < 0x0080 )
         {   

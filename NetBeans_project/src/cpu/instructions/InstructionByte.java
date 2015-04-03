@@ -40,18 +40,18 @@ public class InstructionByte extends Instruction
     }
     
     @Override
-    public void izvrsi()
+    public void execute()
     {
-        super.izvrsi(); // uvecava PC
+        super.execute(); // uvecava PC
 
         // .getRAM mora bit pozvan kod svakog izvrsavanja zbog bankirane memorije
         if (destinationIsW )
         {
-            registarOperand = registerFile.getRAM(registerAddress);
+            registarOperand = registerFile.getRam(registerAddress);
         }
         else
         {
-            registarDestination = registerFile.getRAM(registerAddress);
+            registarDestination = registerFile.getRam(registerAddress);
         }
         
         
@@ -73,7 +73,7 @@ public class InstructionByte extends Instruction
         }
         else if ( type == OPCODE_MOVF )
         {
-            registarDestination.set(registerFile.getRAM(registerAddress));
+            registarDestination.set(registerFile.getRam(registerAddress));
             
             if (registarDestination.get() == 0)
             {
@@ -226,7 +226,7 @@ public class InstructionByte extends Instruction
     }
     
     @Override
-    public String ispisi()
+    public String getAsmCode()
     {
         // ToDo: ispisati i destinaciju operacije
         if (type == (OPCODE_MOVWF & MASKA_INSTR_6)) return "MOVWF " + registerAddress;

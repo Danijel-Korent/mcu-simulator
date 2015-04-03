@@ -27,7 +27,7 @@ public class Timer
         interruptController = intController;
     }
 
-    public void OnTick()
+    public void onTick()
     {
         if( prescalerActive )
         {
@@ -53,24 +53,24 @@ public class Timer
         }
     }
     
-    public void SetPrescalerActive( boolean active)
+    public void setPrescalerActive( boolean active)
     {
         prescalerActive = active;
     }
     
-    public void SetPrescalerSetting( int setting)
+    public void setPrescalerSetting( int setting)
     {
         
         prescalerSetting = 1 << setting;
     }
     
     
-    public int Get()
+    public int get()
     {
         return counter;
     }
     
-    public void Set( int val)
+    public void set( int val)
     {
         if (counter < 0 || counter > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta r: " + val);
         

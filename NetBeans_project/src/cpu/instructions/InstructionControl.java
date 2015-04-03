@@ -34,9 +34,9 @@ public class InstructionControl extends Instruction
     }
 
     @Override
-    public void izvrsi() 
+    public void execute() 
     {
-        super.izvrsi();
+        super.execute();
         
         // ToDo: premjestiti u kontrolne instukcije 
         if (type == OPCODE_GOTO)
@@ -62,12 +62,12 @@ public class InstructionControl extends Instruction
         else if (type == OPCODE_RETFIE)
         {
             registerFile.PC.set( stack.pop() );
-            registerFile.getRAM( 0x0B ).setBit( 7 );
+            registerFile.getRam( 0x0B ).setBit( 7 );
         }
     }
     
     @Override
-    public String ispisi() 
+    public String getAsmCode() 
     {
         if (type == OPCODE_GOTO ) return "GOTO " + value;
         else if (type == OPCODE_CALL ) return "CALL " + value;

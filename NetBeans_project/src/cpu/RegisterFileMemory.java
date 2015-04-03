@@ -95,9 +95,9 @@ public class RegisterFileMemory
         ramBank1[0xB] = regIntcon;
     }
     
-    public Register8b_Base getRAM(int adr)
+    public Register8b_Base getRam(int adr)
     {   
-        if (adr == 0) return getRAMindirektno();
+        if (adr == 0) return getRamIndirect();
         
         if (STATUS.getRP0())
         {
@@ -109,7 +109,7 @@ public class RegisterFileMemory
         }
     }
     
-    public Register8b_Base getRAMindirektno()
+    private Register8b_Base getRamIndirect()
     {
         // datasheet str8.:  Indirect addressing uses the present value of the RP0 bit for access into the banked areas of data memory.
         // datasheet str14.: Nacrtano suprotno od gornje tvrdnje

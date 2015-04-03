@@ -29,11 +29,11 @@ public class InstructionBit extends Instruction
     }
 
     @Override
-    public void izvrsi() 
+    public void execute() 
     {
-        super.izvrsi(); 
+        super.execute(); 
         
-        registarOperand = registerFile.getRAM(registerAddress);
+        registarOperand = registerFile.getRam(registerAddress);
         
         if ( type == OPCODE_BCF)
         {
@@ -60,7 +60,7 @@ public class InstructionBit extends Instruction
     }
 
     @Override
-    public String ispisi() 
+    public String getAsmCode() 
     {
         if (type == OPCODE_BCF)      return "BCF " + registerAddress + ", " + bit;
         else if (type == OPCODE_BSF) return "BSF " + registerAddress + ", " + bit;

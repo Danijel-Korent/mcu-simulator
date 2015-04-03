@@ -39,7 +39,7 @@ public class CPU
         // popunjavanje programske memorije
         for(int i=0; i < 1024; i++) 
         {
-            rom[i] = Instruction.Instanciraj(0);
+            rom[i] = Instruction.getInstance(0);
         }
         
         
@@ -54,7 +54,7 @@ public class CPU
     
     public Register8b_Base getRAM(int adr)
     {
-        return RegisterFile.getRAM(adr);
+        return RegisterFile.getRam(adr);
     }
     
     
@@ -66,7 +66,7 @@ public class CPU
     
     public void ExecuteInstruction()
     {
-        timerModule.OnTick();
+        timerModule.onTick();
         
         if ( interruptController.isInterrupted() )
         {
@@ -75,13 +75,13 @@ public class CPU
             interruptController.setGlobalEnable( false );
         }
         
-        rom[ RegisterFile.PC.get() ].izvrsi();
+        rom[ RegisterFile.PC.get() ].execute();
     }
     
     
     public String ispisiInstrukciju(int adr)
     {
-        return rom[adr].ispisi();
+        return rom[adr].getAsmCode();
     }
     
     public void ParseAssemblerCode( String text )
@@ -95,7 +95,7 @@ public class CPU
         {
             int opcode = instruction.GetOpcode();
             
-            rom[i++] = Instruction.Instanciraj( opcode );
+            rom[i++] = Instruction.getInstance( opcode );
         }
     }
     
@@ -191,23 +191,23 @@ public class CPU
     private void PokusniProgramStari()
     {
         int i = 0;
-        rom[i++] = Instruction.Instanciraj(0);
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 133);       // MOVLW 133     : w = 133
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 0);       // MOVLW 0     : w = 0
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 0);        // MOVWF 4      : RAM[0] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 127-32-1);       // MOVLW 14     : w = 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 6);        // MOVWF 4      : RAM[4] = w
+        rom[i++] = Instruction.getInstance(0);
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 133);       // MOVLW 133     : w = 133
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 0);       // MOVLW 0     : w = 0
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 0);        // MOVWF 4      : RAM[0] = w
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 127-32-1);       // MOVLW 14     : w = 14
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 6);        // MOVWF 4      : RAM[4] = w
         
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 14);       // MOVLW 14     : w = 14
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 64);       // MOVLW 64     : w = 64
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 15);       // MOVWF 15     : RAM[15] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVF + 0);    // MOVF 0, w   A: w = RAM[0]
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_ADDWF + 15);   // ADDWF 15, w  : w = w + RAM[15] 
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 14);       // MOVWF 14     : RAM[14] = w
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVLW + 5);         
-        rom[i++] = Instruction.Instanciraj(Instruction.OPCODE_MOVWF + 2);         // GOTO 5       : GOTO A
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 14);       // MOVLW 14     : w = 14
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 4);        // MOVWF 4      : RAM[4] = w
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 64);       // MOVLW 64     : w = 64
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 15);       // MOVWF 15     : RAM[15] = w
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVF + 0);    // MOVF 0, w   A: w = RAM[0]
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_ADDWF + 15);   // ADDWF 15, w  : w = w + RAM[15] 
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 14);       // MOVWF 14     : RAM[14] = w
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVLW + 5);         
+        rom[i++] = Instruction.getInstance(Instruction.OPCODE_MOVWF + 2);         // GOTO 5       : GOTO A
     }
     
     /*

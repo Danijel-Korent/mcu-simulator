@@ -47,12 +47,12 @@ public class RegisterOption extends Register8b_Base
         
         if((changedBits & PS) != 0)
         {
-            timer.SetPrescalerSetting(newValue & PS);
+            timer.setPrescalerSetting(newValue & PS);
         }
         
         if((changedBits & PSA) != 0)
         {
-            timer.SetPrescalerActive( (newValue & PSA) == 0 );
+            timer.setPrescalerActive( (newValue & PSA) == 0 );
         }
         
         if((changedBits & T0CS) != 0)

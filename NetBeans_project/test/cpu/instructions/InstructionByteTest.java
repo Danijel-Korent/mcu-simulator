@@ -90,29 +90,29 @@ public class InstructionByteTest
         
         
         // Test with destination F
-        testInstr = Instruction.Instanciraj( Instruction.OPCODE_ADDWF + destinationF + fileAddress );
+        testInstr = Instruction.getInstance( Instruction.OPCODE_ADDWF + destinationF + fileAddress );
         
-        RegisterFile.getRAM(fileAddress).set( fileVal );
+        RegisterFile.getRam(fileAddress).set( fileVal );
         RegisterFile.W.set( regW );
         
-        testInstr.izvrsi();
+        testInstr.execute();
         
         assertEquals( 1, RegisterFile.PC.get());
         assertEquals( regW, RegisterFile.W.get() );
-        assertEquals( fileVal + regW, RegisterFile.getRAM(fileAddress).get());
+        assertEquals( fileVal + regW, RegisterFile.getRam(fileAddress).get());
         
         
         // Test with destination W
-        testInstr = Instruction.Instanciraj( Instruction.OPCODE_ADDWF + destinationW + fileAddress );
+        testInstr = Instruction.getInstance( Instruction.OPCODE_ADDWF + destinationW + fileAddress );
         
-        RegisterFile.getRAM(fileAddress).set( fileVal );
+        RegisterFile.getRam(fileAddress).set( fileVal );
         RegisterFile.W.set( regW );
         
-        testInstr.izvrsi();
+        testInstr.execute();
         
         assertEquals( 2, RegisterFile.PC.get());
         assertEquals( regW + fileVal, RegisterFile.W.get() );
-        assertEquals( fileVal, RegisterFile.getRAM(fileAddress).get());
+        assertEquals( fileVal, RegisterFile.getRam(fileAddress).get());
     }
     
     @Test

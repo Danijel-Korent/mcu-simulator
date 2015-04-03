@@ -26,9 +26,9 @@ public class InstructionLiteral extends Instruction
     }
     
     @Override
-    public void izvrsi()
+    public void execute()
     {
-        super.izvrsi(); // uvecava PC
+        super.execute(); // uvecava PC
         
         if (type == OPCODE_MOVLW) 
         {
@@ -93,7 +93,7 @@ public class InstructionLiteral extends Instruction
     }
     
     @Override
-    public String ispisi()
+    public String getAsmCode()
     {
         if (type == OPCODE_MOVLW) return "MOVLW " + value;
         else if (type == OPCODE_ANDLW ) return "ANDLW " + value;        

@@ -24,7 +24,7 @@ public class RegisterTmr0 extends Register8b_Base
     @Override
     public int get()
     {
-        return timerModule.Get();
+        return timerModule.get();
     }
     
     @Override
@@ -32,6 +32,6 @@ public class RegisterTmr0 extends Register8b_Base
     {
         if (k < 0 || k > 255) throw new IllegalArgumentException("Nepravilna vrijednost argumenta r: " + k);
         
-        timerModule.Set(k);
+        timerModule.set(k);
     }
 }
