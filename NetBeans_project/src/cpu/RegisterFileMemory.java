@@ -10,7 +10,7 @@ import cpu.functionRegisters.RegisterOption;
 import cpu.functionRegisters.RegisterTmr0;
 import cpu.modules.Timer;
 import cpu.registers.Register8b_Base;
-import cpu.registers.Register8b_Normal;
+import cpu.registers.Register8b_Standard;
 import cpu.registers.RegisterStatus;
 import cpu.registers.Register8b_Unimplemented;
 import cpu.functionRegisters.RegisterPC;
@@ -28,15 +28,15 @@ public class RegisterFileMemory
     
     public final RegisterPC PC = new RegisterPC();
     
-    public final Register8b_Base W = new Register8b_Normal();
+    public final Register8b_Base W = new Register8b_Standard();
     public final RegisterStatus STATUS = new RegisterStatus();
-    private final Register8b_Base FSR = new Register8b_Normal();
+    private final Register8b_Base FSR = new Register8b_Standard();
     
-    public final Register8b_Base PORTA = new Register8b_Normal();
-    public final Register8b_Base PORTB = new Register8b_Normal();
+    public final Register8b_Base PORTA = new Register8b_Standard();
+    public final Register8b_Base PORTB = new Register8b_Standard();
     
-    final Register8b_Base TRISA = new Register8b_Normal();
-    final Register8b_Base TRISB = new Register8b_Normal();
+    final Register8b_Base TRISA = new Register8b_Standard();
+    final Register8b_Base TRISB = new Register8b_Standard();
 
     // ToDo: 
     public RegisterFileMemory(Timer timerModule, InterruptController interruptController) 
@@ -51,14 +51,14 @@ public class RegisterFileMemory
         // Privremeno popunjavanje SFR adresnog prostora sa opcim registrima
         for(int i=1; i < 0x0C; i++) 
         {
-            ramBank0[i]= new Register8b_Normal();
-            ramBank1[i]= new Register8b_Normal();
+            ramBank0[i]= new Register8b_Standard();
+            ramBank1[i]= new Register8b_Standard();
         }
 
         // Popunjavanja GPR adresnog prostora
         for(int i=0x0C; i < 0x50; i++)
             {
-                Register8b_Base reg = new Register8b_Normal();
+                Register8b_Base reg = new Register8b_Standard();
                 ramBank0[i]= reg;
                 ramBank1[i]= reg;
             }

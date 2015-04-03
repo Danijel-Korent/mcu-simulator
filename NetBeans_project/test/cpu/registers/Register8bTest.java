@@ -64,7 +64,7 @@ public class Register8bTest {
     @Test
     public void testInit() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
 
         assertEquals("Value on init = 0", 0, instance.get());
     }
@@ -75,7 +75,7 @@ public class Register8bTest {
     @Test
     public void testGetSet() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(255);
         assertEquals("Set 255", 255, instance.get());
@@ -93,14 +93,14 @@ public class Register8bTest {
     @Test(expected=IllegalArgumentException.class)
     public void testSet_intSmall() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         instance.set(-5);
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void testSet_intBig() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         instance.set(256);
     }
 
@@ -110,9 +110,9 @@ public class Register8bTest {
     @Test
     public void testSet_Registar8() 
     {
-        Register8b_Normal reg1 = new Register8b_Normal();
-        Register8b_Normal reg2 = new Register8b_Normal();
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard reg1 = new Register8b_Standard();
+        Register8b_Standard reg2 = new Register8b_Standard();
+        Register8b_Standard instance = new Register8b_Standard();
 
         reg1.set(5);
         instance.set(reg1);
@@ -130,9 +130,9 @@ public class Register8bTest {
     @Test
     public void testAdd_Registar8() 
     {
-        Register8b_Normal reg1 = new Register8b_Normal();
-        Register8b_Normal reg2 = new Register8b_Normal();
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard reg1 = new Register8b_Standard();
+        Register8b_Standard reg2 = new Register8b_Standard();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(7);
         
@@ -152,7 +152,7 @@ public class Register8bTest {
     @Test
     public void testAdd_int() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(10);
         
@@ -166,7 +166,7 @@ public class Register8bTest {
     @Test
     public void testOverflow() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(255);
         instance.add(1);
@@ -212,7 +212,7 @@ public class Register8bTest {
     {
         // ToDo: test argument exeption
         
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(128*1 + 64*0 + 32*0 + 16*1 + 8*1 + 4*0 + 2*1 + 1);
         
@@ -232,7 +232,7 @@ public class Register8bTest {
     @Test
     public void testSetBit() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(2);
         instance.setBit(0);
@@ -261,7 +261,7 @@ public class Register8bTest {
     @Test
     public void testClearBit() 
     {
-        Register8b_Normal instance = new Register8b_Normal();
+        Register8b_Standard instance = new Register8b_Standard();
         
         instance.set(2);
         instance.clearBit(0);

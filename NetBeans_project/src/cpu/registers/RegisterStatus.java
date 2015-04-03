@@ -10,7 +10,7 @@ package cpu.registers;
  *
  * @author Danijel Korent
  */
-public class RegisterStatus extends Register8b_Normal 
+public class RegisterStatus extends Register8b_Standard 
 {
     
     public RegisterStatus() 

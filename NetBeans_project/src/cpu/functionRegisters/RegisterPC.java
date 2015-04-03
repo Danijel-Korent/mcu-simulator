@@ -1,7 +1,7 @@
 package cpu.functionRegisters;
 
 import cpu.registers.Register8b_Base;
-import cpu.registers.Register8b_Normal;
+import cpu.registers.Register8b_Standard;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,8 +15,8 @@ import cpu.registers.Register8b_Normal;
  */
 public class RegisterPC 
 {
-    private final Register8b_Base PCH = new Register8b_Normal();
-    private final Register8b_Base PCL = new Register8b_Normal();
+    private final Register8b_Base PCH = new Register8b_Standard();
+    private final Register8b_Base PCL = new Register8b_Standard();
     
     public RegisterPC() 
     {

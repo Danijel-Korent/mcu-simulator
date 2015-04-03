@@ -2,7 +2,6 @@ package cpu.instructions;
 
 import cpu.registers.Flags;
 import cpu.registers.Register8b_Base;
-import cpu.registers.Register8b_Normal;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

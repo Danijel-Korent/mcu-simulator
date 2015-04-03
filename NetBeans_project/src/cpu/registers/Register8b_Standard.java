@@ -9,11 +9,11 @@ package cpu.registers;
  *
  * @author dkorent
  */
-public class Register8b_Normal extends Register8b_Base
+public class Register8b_Standard extends Register8b_Base
 {
     private int value;
 
-    public Register8b_Normal() 
+    public Register8b_Standard() 
     {
         value = 0;
     }
