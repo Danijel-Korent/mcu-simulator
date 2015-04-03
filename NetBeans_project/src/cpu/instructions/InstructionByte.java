@@ -63,13 +63,13 @@ public class InstructionByte extends Instruction
         {        
             Flags zastavice = registarDestination.add( registarOperand );
 
-            cpu.getStatus().postaviZastavice( zastavice ); 
+            cpu.getStatus().setCpuFlags( zastavice ); 
         }
         else if (type == OPCODE_SUBWF)
         {        
             Flags zastavice = registarDestination.sub( registarOperand );
 
-            cpu.getStatus().postaviZastavice( zastavice ); 
+            cpu.getStatus().setCpuFlags( zastavice ); 
         }
         else if ( type == OPCODE_MOVF )
         {

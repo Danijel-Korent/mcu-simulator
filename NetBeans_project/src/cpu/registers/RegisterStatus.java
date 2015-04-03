@@ -26,15 +26,15 @@ public class RegisterStatus extends Register8b_Standard
         super.set((newValue & 0x27) | (this.get() & 0x18)); // bitovi 3 i 4 (TO i PD) su non-writable, datasheet str.8
     }
     
-    public void postaviZastavice(Flags zastavice)
+    public void setCpuFlags(Flags flags)
     {
-        if (zastavice.c) setC();
+        if (flags.c) setC();
         else clearC();
         
-        if (zastavice.dc) setDC();
+        if (flags.dc) setDC();
         else clearDC();
         
-        if (zastavice.z) setZ();
+        if (flags.z) setZ();
         else clearZ();
     }
     

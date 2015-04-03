@@ -77,13 +77,13 @@ public class InstructionLiteral extends Instruction
         {
             Flags zastavice = cpu.getW().add( value );
 
-            cpu.getStatus().postaviZastavice( zastavice ); 
+            cpu.getStatus().setCpuFlags( zastavice ); 
         }
         else if (type == OPCODE_SUBLW)
         {
             Flags zastavice = cpu.getW().sub(value );
 
-            cpu.getStatus().postaviZastavice( zastavice ); 
+            cpu.getStatus().setCpuFlags( zastavice ); 
         }
         else if (type == OPCODE_RETLW)
         {
