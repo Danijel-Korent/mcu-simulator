@@ -6,7 +6,7 @@ import cpu.CpuExternalInterface;
 import cpu.registers.Register8b_Base;
 import cpu.registers.RegisterStatus;
 import java.awt.Color;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import peripherals.SevenSegDisplay;
 
@@ -501,8 +501,8 @@ public class App extends javax.swing.JFrame {
         else 
             jLabel8.setForeground(Color.RED);    
         
-        Vector portB = new Vector();
-        Vector portA = new Vector();
+        ArrayList<JLabel> portB = new ArrayList<>();
+        ArrayList<JLabel> portA = new ArrayList<>();
         
         // premjersitit u init
         portA.add(jLabel28);
