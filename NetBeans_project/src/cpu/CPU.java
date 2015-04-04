@@ -88,12 +88,18 @@ public class CPU implements CpuExternalInterface
         rom[ RegisterFile.PC.get() ].execute();
     }
     
-    public void ParseAssemblerCode( String text )
+    public String ParseAssemblerCode( String text )
     {
-        ArrayList<AsmInstruction> instructions = Parser.Parse( text );
+        Parser parser = new Parser();
+        ArrayList<AsmInstruction> instructions = parser.Parse( text );
         
         clearRom();
 
+        if( instructions.size() > 0)
+        {
+            this.clearRom();
+        }
+        
         int i = 0;
         for( AsmInstruction instruction : instructions )
         {
@@ -101,6 +107,9 @@ public class CPU implements CpuExternalInterface
             
             rom[i++] = Instruction.getInstance( opcode );
         }
+        
+        
+        return parser.getErrorMsg();
     }
 
     /******************************** CpuExternalInterface implementation ***********************************************************************/

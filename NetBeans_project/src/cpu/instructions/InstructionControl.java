@@ -62,7 +62,7 @@ public class InstructionControl extends Instruction
         else if (type == OPCODE_RETFIE)
         {
             cpu.getPc().set( cpu.popStack() );
-            cpu.getRam( 0x0B ).setBit( 7 );
+            cpu.enableGlobalInterrupts();
         }
     }
     

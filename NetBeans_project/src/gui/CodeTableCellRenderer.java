@@ -38,7 +38,18 @@ implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
     {
       setBackground(Color.white);
-      if (row == cpu.getPc().get()) setBackground(Color.yellow);
+      
+      if( row == cpu.getPc().get() )
+      {
+          if( cpu.isIsr())
+          {
+              setBackground(Color.red);
+          }
+          else
+          {
+              setBackground(Color.yellow);
+          }
+      }
       //setHorizontalAlignment(JLabel.CENTER);
       String str = (value == null) ? "" : value.toString();
       setText( " " + str );

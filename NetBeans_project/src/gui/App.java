@@ -6,6 +6,7 @@ import cpu.CpuExternalInterface;
 import cpu.registers.Register8b_Base;
 import cpu.registers.RegisterStatus;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import peripherals.SevenSegDisplay;
@@ -25,7 +26,7 @@ public class App extends javax.swing.JFrame {
     /**
      * Creates new form App
      */
-    
+
     CPU cpu = new CPU();
     SevenSegDisplay testDisplay;
     
@@ -36,7 +37,9 @@ public class App extends javax.swing.JFrame {
     public App() 
     {
         initComponents();
-        
+          
+        this.setTitle("Simulator PIC16F84A");
+    
         String temp = 
                   ""
                 + "\n" + "option equ 0x01"
@@ -51,25 +54,27 @@ public class App extends javax.swing.JFrame {
                 + "\n" + "org 0x04"
                 + "\n" + "   movlw 0x78"
                 + "\n" + "   movwf intcon    ;enable interrupt sources, clear int flags"
+                + "\n" + "   nop"
+                + "\n" + "   nop"
                 + "\n" + "   retfie          ;return and set global int enable "
                 + "\n" + ""
-                + "\n" + "org 10"
+                + "\n" + "org 12"
                 + "\n" + "start:"
-                + "\n" + "   bsf status, 5   ;select bank 1"
+                + "\n" + "   bsf   status, 5  ;select bank 1"
                 + "\n" + "   movlw 0xf0"
-                + "\n" + "   andwf option, f ;activate prescaler and set to 2:1 "
-                + "\n" + "   bcf status, 5   ;select bank 0"
-                + "\n" + "   call 4          ;to enable interrupts"
+                + "\n" + "   andwf option, f  ;activate prescaler and set to 2:1 "
+                + "\n" + "   bcf   status, 5  ;select bank 0"
+                + "\n" + "   call  4          ;to enable interrupts"
                 + "\n" + "   movlw 251"
-                + "\n" + "   iorwf tmr0, f   ;change timer value"
+                + "\n" + "   iorwf tmr0, f    ;change timer value"
                 + "\n" + ""
                 + "\n" + "petlja:"
                 //+ "\n" + "movlw 11"
                 + "\n" + "   andlw 0xa0"
                 + "\n" + "   movwf portb"
-                + "\n" + "   call procedura"
-                + "\n" + "   rlf portb, f"
-                + "\n" + "   goto petlja"
+                + "\n" + "   call  procedura"
+                + "\n" + "   rlf   portb, f"
+                + "\n" + "   goto  petlja"
                 + "\n" + ""
                 + "\n" + "org 0x20"
                 + "\n" + "procedura:"
@@ -82,6 +87,7 @@ public class App extends javax.swing.JFrame {
         
         
         jTextArea1.setText(temp);
+        jTextArea1.setFont(new Font("monospaced", Font.PLAIN, 12));
         
         testDisplay = new SevenSegDisplay();
         jPanelPeripherals.set( testDisplay );
@@ -144,17 +150,6 @@ public class App extends javax.swing.JFrame {
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
@@ -174,7 +169,7 @@ public class App extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jPanelPeripherals = new JPanelPeripherals();
         jPanel5 = new javax.swing.JPanel();
-        jLabel39 = new javax.swing.JLabel();
+        jLabelStatusBar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -277,7 +272,7 @@ public class App extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("tab1", jPanel3);
+        jTabbedPane1.addTab("Unos koda", jPanel3);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -323,7 +318,7 @@ public class App extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setText("Z");
 
-        jLabel10.setText("jLabel10");
+        jLabel10.setText("0");
 
         jLabel31.setText("0");
 
@@ -339,39 +334,15 @@ public class App extends javax.swing.JFrame {
 
         jLabel37.setText("0");
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel11.setText("PORT A");
+        jLabel22.setText("RA4");
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel12.setText("PORT B");
+        jLabel23.setText("RA3");
 
-        jLabel13.setText("Bit no.");
+        jLabel24.setText("RA2");
 
-        jLabel14.setText("7");
+        jLabel25.setText("RA1");
 
-        jLabel15.setText("6");
-
-        jLabel16.setText("5");
-
-        jLabel17.setText("4");
-
-        jLabel18.setText("3");
-
-        jLabel19.setText("2");
-
-        jLabel20.setText("1");
-
-        jLabel21.setText("0");
-
-        jLabel22.setText("0");
-
-        jLabel23.setText("0");
-
-        jLabel24.setText("0");
-
-        jLabel25.setText("0");
-
-        jLabel26.setText("0");
+        jLabel26.setText("RA0");
 
         jLabel27.setText("0");
 
@@ -385,11 +356,11 @@ public class App extends javax.swing.JFrame {
 
         jLabel29.setText("0");
 
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("0");
 
         jLabel30.setText("0");
 
-        jLabel4.setText("jLabel4");
+        jLabel4.setText("0");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("C");
@@ -427,8 +398,7 @@ public class App extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(18, 18, 18)
+                                .addGap(58, 58, 58)
                                 .addComponent(jLabel30)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel31)
@@ -445,44 +415,23 @@ public class App extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel36))
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel13))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(jLabel14)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel15)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel16)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel17)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel18)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel19)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel20)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel21))
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(jLabel22)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel23)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel24)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel25)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel26)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel27)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel29)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel28)))))
-                        .addGap(30, 30, 30)
+                                .addGap(59, 59, 59)
+                                .addComponent(jLabel22)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel23)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel24)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel25)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel26)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel27)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel29)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel28)))
+                        .addGap(46, 46, 46)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
@@ -517,20 +466,9 @@ public class App extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel3))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel13)
-                                .addComponent(jLabel14)
-                                .addComponent(jLabel15)
-                                .addComponent(jLabel16)
-                                .addComponent(jLabel17)
-                                .addComponent(jLabel18)
-                                .addComponent(jLabel19)
-                                .addComponent(jLabel20)
-                                .addComponent(jLabel21)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -549,7 +487,6 @@ public class App extends javax.swing.JFrame {
                                     .addComponent(jLabel9)))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel11)
                                     .addComponent(jLabel22)
                                     .addComponent(jLabel23)
                                     .addComponent(jLabel24)
@@ -560,7 +497,6 @@ public class App extends javax.swing.JFrame {
                                     .addComponent(jLabel28))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel12)
                                     .addComponent(jLabel30)
                                     .addComponent(jLabel31)
                                     .addComponent(jLabel32)
@@ -577,11 +513,11 @@ public class App extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab2", jPanel4);
+        jTabbedPane1.addTab("Simulator", jPanel4);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel39.setText("jLabel39");
+        jLabelStatusBar.setText("Status bar");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -589,14 +525,14 @@ public class App extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelStatusBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel39)
+                .addComponent(jLabelStatusBar)
                 .addContainerGap())
         );
 
@@ -643,7 +579,9 @@ public class App extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         cpu.reset();
-        cpu.ParseAssemblerCode( jTextArea1.getText() );
+        String errorMsg = cpu.ParseAssemblerCode( jTextArea1.getText() );
+        
+        jLabelStatusBar.setText(errorMsg);
         refreshGui();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -794,18 +732,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -824,13 +751,13 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelStatusBar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

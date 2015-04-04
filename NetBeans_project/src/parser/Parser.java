@@ -17,16 +17,25 @@ import java.util.Locale;
 public class Parser 
 {
     
+    String errorMsg;
+    
     public Parser()
     {
 
     }
     
-    public static ArrayList<AsmInstruction> Parse( String text)
+    public String getErrorMsg()
+    {
+        return errorMsg;
+    }
+    
+    public ArrayList<AsmInstruction> Parse( String text)
     {
         String retStr = "";
         String tempStr = "";
         Integer i;
+        
+        errorMsg = "Uspješno parsirano!";
         
         ArrayList<AsmInstruction> instructions = new ArrayList<>();
         ArrayList<Token> tokens = new ArrayList<>();
@@ -42,11 +51,11 @@ public class Parser
                 tempStr += i.toString() + "\t" + item.toString() + "\n";
                 i++;
             }
-            retStr += tempStr + "\n\n"; // + retStr;
+            retStr = tempStr + "\n\n"; // + retStr;
         }
         catch( Exception e)
         {
-            retStr += e.toString();
+            errorMsg = e.toString();
         }
         
         
@@ -65,7 +74,7 @@ public class Parser
         }
         catch( Exception e)
         {
-            retStr += e.toString();
+            errorMsg = e.toString();
         }
             
         
@@ -85,7 +94,7 @@ public class Parser
         }
         catch( Exception e)
         {
-            retStr += e.toString();
+            errorMsg = e.toString();
         }
         
 
@@ -94,7 +103,7 @@ public class Parser
   
     
     // parse list of tokens into AsmInstruction list
-    private static ArrayList<AsmInstruction> ParseTokens( ArrayList<Token> tokens )
+    private ArrayList<AsmInstruction> ParseTokens( ArrayList<Token> tokens )
     {
         ArrayList<AsmInstruction> instructions = new ArrayList<>(); 
         
@@ -311,7 +320,7 @@ public class Parser
     }
     
     // Parse string list of words into list of tokens
-    private static ArrayList<Token> ParseWords( ArrayList<String> words )
+    private ArrayList<Token> ParseWords( ArrayList<String> words )
     {
         ArrayList<Token> tokens = new ArrayList<>();
         
@@ -330,7 +339,7 @@ public class Parser
     }
     
     // Parse text string and split it into string list of words and operators (while ignoring comments)
-    private static ArrayList<String> ParseText( String text )
+    private ArrayList<String> ParseText( String text )
     {
         ArrayList<String> tokens = new ArrayList<>();
         int firstLetterPtr = 0;
