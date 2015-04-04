@@ -61,8 +61,10 @@ public class InstructionBit extends Instruction
     @Override
     public String getAsmCode() 
     {
-        if (type == OPCODE_BCF)      return "BCF " + registerAddress + ", " + bit;
-        else if (type == OPCODE_BSF) return "BSF " + registerAddress + ", " + bit;
+        if (type == OPCODE_BCF)        return "BCF    " + registerAddress + ", " + bit;
+        else if (type == OPCODE_BSF)   return "BSF    " + registerAddress + ", " + bit;
+        else if (type == OPCODE_BTFSC) return "BTFSC  " + registerAddress + ", " + bit;
+        else if (type == OPCODE_BTFSS) return "BTFSS  " + registerAddress + ", " + bit;
         
         return "Nepoznata istrukcija!! PC = " + (cpu.getPc().get()-1) + " : Inst: " + opcode;
     }

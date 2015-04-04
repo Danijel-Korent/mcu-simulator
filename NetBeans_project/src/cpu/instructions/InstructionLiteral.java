@@ -95,13 +95,13 @@ public class InstructionLiteral extends Instruction
     @Override
     public String getAsmCode()
     {
-        if (type == OPCODE_MOVLW) return "MOVLW " + value;
-        else if (type == OPCODE_ANDLW ) return "ANDLW " + value;        
-        else if (type == OPCODE_ADDLW ) return "ADDLW " + value;
-        else if (type == OPCODE_ANDLW ) return "ANDLW " + value;        
-        else if (type == OPCODE_IORLW ) return "IORLW " + value;
-        else if (type == OPCODE_XORLW ) return "XORLW " + value;
-        else if (type == OPCODE_RETLW ) return "RETLW " + value;
+        if (type == OPCODE_MOVLW) return "MOVLW  " + value;
+        else if (type == OPCODE_ANDLW ) return "ANDLW  " + value;        
+        else if (type == OPCODE_ADDLW ) return "ADDLW  " + value;
+        else if (type == OPCODE_ANDLW ) return "ANDLW  " + value;        
+        else if (type == OPCODE_IORLW ) return "IORLW  " + value;
+        else if (type == OPCODE_XORLW ) return "XORLW  " + value;
+        else if (type == OPCODE_RETLW ) return "RETLW  " + value;
 
         
         return "Nepoznata LIT istrukcija!! PC = " + (cpu.getPc().get()-1) + " : Inst: " + opcode;

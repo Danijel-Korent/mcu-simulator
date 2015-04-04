@@ -517,6 +517,7 @@ public class App extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jLabelStatusBar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelStatusBar.setText("Status bar");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);

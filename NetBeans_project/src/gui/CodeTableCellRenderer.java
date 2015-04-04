@@ -4,6 +4,7 @@ package gui;
 import cpu.CpuExternalInterface;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -29,6 +30,7 @@ implements TableCellRenderer {
     {
         super();
         this.cpu = cpu;
+        this.setFont(new Font("monospaced", Font.PLAIN, 12));
         setOpaque(true);
         
     }

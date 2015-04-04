@@ -69,8 +69,8 @@ public class InstructionControl extends Instruction
     @Override
     public String getAsmCode() 
     {
-        if (type == OPCODE_GOTO ) return "GOTO " + value;
-        else if (type == OPCODE_CALL ) return "CALL " + value;
+        if (type == OPCODE_GOTO )      return "GOTO   " + value;
+        else if (type == OPCODE_CALL ) return "CALL   " + value;
         else if (type == OPCODE_RETURN ) return "RETURN";
         else if (type == OPCODE_RETFIE ) return "RETFIE";
         else if (type == OPCODE_NOP ) return "NOP";

@@ -221,17 +221,28 @@ public class InstructionByte extends Instruction
     @Override
     public String getAsmCode()
     {
+        String destination = ", ";
+        
+        if( destinationIsW )
+        {
+            destination += "w";
+        }
+        else
+        {
+            destination += "f";
+        }
+        
         // ToDo: ispisati i destinaciju operacije
-        if (type == (OPCODE_MOVWF & MASKA_INSTR_6)) return "MOVWF " + registerAddress;
-        else if (type == OPCODE_MOVF) return "MOVF " + registerAddress;
-        else if (type == OPCODE_ADDWF) return "ADDWF " + registerAddress;
-        else if (type == OPCODE_ANDWF ) return "ANDWF " + registerAddress;
-        else if (type == OPCODE_IORWF ) return "IORWF " + registerAddress;
-        else if (type == OPCODE_RLF ) return "RLF " + registerAddress;
-        else if (type == OPCODE_RRF ) return "RRF " + registerAddress;        
-        else if (type == OPCODE_CLR ) return "CLR " + registerAddress;
-        else if (type == OPCODE_COMF ) return "COMF " + registerAddress;
-        else if (type == OPCODE_SWAPF ) return "SWAPF " + registerAddress;
+        if (type == (OPCODE_MOVWF & MASKA_INSTR_6))  return "MOVWF  " + registerAddress;
+        else if (type == OPCODE_MOVF)   return "MOVF   " + registerAddress + destination;
+        else if (type == OPCODE_ADDWF)  return "ADDWF  " + registerAddress + destination;
+        else if (type == OPCODE_ANDWF ) return "ANDWF  " + registerAddress + destination;
+        else if (type == OPCODE_IORWF ) return "IORWF  " + registerAddress + destination;
+        else if (type == OPCODE_RLF )   return "RLF    " + registerAddress + destination;
+        else if (type == OPCODE_RRF )   return "RRF    " + registerAddress + destination;
+        else if (type == OPCODE_CLR )   return "CLR    " + registerAddress + destination;
+        else if (type == OPCODE_COMF )  return "COMF   " + registerAddress + destination;
+        else if (type == OPCODE_SWAPF ) return "SWAPF  " + registerAddress + destination;
 
         return "Nepoznata istrukcija!! PC = " + ( cpu.getPc().get()-1) + " : Inst: " + opcode;
     }
