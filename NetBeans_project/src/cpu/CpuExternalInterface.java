@@ -6,6 +6,7 @@
 package cpu;
 
 import cpu.instructions.Instruction;
+import cpu.registers.Register8b_Base;
 //import cpu.registers.Register8b_Base;
 
 /**
@@ -21,6 +22,9 @@ public interface CpuExternalInterface extends CpuInternalInterface
     //Register8b_Base GetPc();
     //Register8b_Base GetW();
     //Register8b_Base GetStatus();
+    
+    Register8b_Base getRegPortA();
+    Register8b_Base getRegPortB();
     
     int getActiveBank();
     boolean isIsr();

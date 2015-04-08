@@ -174,6 +174,19 @@ public class CPU implements CpuExternalInterface
     {
         return RegisterFile.STATUS;
     }
+    
+
+    @Override
+    public Register8b_Base getRegPortA() 
+    {
+        return RegisterFile.PORTA;
+    }
+
+    @Override
+    public Register8b_Base getRegPortB() 
+    {
+        return RegisterFile.PORTB;
+    }
 
     @Override
     public void enableGlobalInterrupts() 

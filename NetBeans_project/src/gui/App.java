@@ -594,15 +594,10 @@ public class App extends javax.swing.JFrame {
 
     private void refreshGui()
     {
-        /************ Update GUI **********/
-        final int PORTA = 0x05;
-        final int PORTB = 0x06;
         
         RegisterStatus regStatus = cpu.getStatus();
-        
-        // Todo: Add interface methods for getim PORT regs, because getRam checks banking
-        Register8b_Base regPortA = cpu.getRam( PORTA );
-        Register8b_Base regPortB = cpu.getRam( PORTB );
+        Register8b_Base regPortA = cpu.getRegPortA();
+        Register8b_Base regPortB = cpu.getRegPortB();
         
         // ToDo: hardcodirano dok se ne implementira hwpin interface
         testDisplay.set( regPortB.get() & 0x0F );
