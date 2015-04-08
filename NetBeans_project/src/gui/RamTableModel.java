@@ -18,24 +18,28 @@ public class RamTableModel extends AbstractTableModel
 {
     CpuExternalInterface cpu;
 
-    public RamTableModel(CpuExternalInterface cpu) {
+    public RamTableModel(CpuExternalInterface cpu) 
+    {
         super();
         this.cpu = cpu;
     }
 
 
     @Override
-    public int getRowCount() {
+    public int getRowCount() 
+    {
         return 16;
     }
 
     @Override
-    public int getColumnCount() {
+    public int getColumnCount() 
+    {
         return 9;
     }
     
     @Override
-    public String getColumnName(int i) {
+    public String getColumnName(int i) 
+    {
         if (i == 0) return "Adr.";
         else return "  +" + (i-1);
     }
@@ -53,6 +57,8 @@ public class RamTableModel extends AbstractTableModel
             return Integer.toHexString(val);
         }
 
-        return Integer.toHexString( cpu.getRam( (byte)(i*8 + i1-1) ).get());
+        int value = cpu.getRam( (byte)(i*8 + i1-1) ).get();
+        
+        return String.format("%02X", value);
     }  
 }
