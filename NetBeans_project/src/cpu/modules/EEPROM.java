@@ -16,22 +16,38 @@ public class EEPROM
     private int regEECON1;
     private int regEECON2;
     
-    private int[] data = new int[64];
+    private final int dataSize = 64;
+    private int[] data = new int[dataSize];
 
     private final int writeSeq1 = 0x55;
     private final int writeSeq2 = 0xAA;
     private final int waitWriteBit = 0xBB;
     private int sequenceState = 0;
     
+    private boolean writeInProgress;
+    private int writeTimer;
+    private final int writeTimerDefault = 5;
     
-    public EEPROM() 
+    private InterruptController interuptController;
+    
+    private final int BIT_EECON1_EEIF  = 0x10;
+    private final int BIT_EECON1_WRERR = 0x08;
+    private final int BIT_EECON1_WREN  = 0x04;
+    private final int BIT_EECON1_WR    = 0x02;
+    private final int BIT_EECON1_RD    = 0x01;
+    
+    public EEPROM( InterruptController intCtrl) 
     {
         for( int value : data)
         {
             value = 0;
         }
         
+        interuptController = intCtrl;
+        
         sequenceState = writeSeq1;
+        writeInProgress = false;
+        writeTimer = writeTimerDefault;
     }
     
     public void onTick()
@@ -49,14 +65,21 @@ public class EEPROM
             sequenceState = writeSeq1;
         }
         
-        // if write in progress
-        //      cnt--;
-        //      if cnt == 0 and regAdr < 65
-        //          data[regAdr] = regEEDATA;
-        //          intCtrl.setIntFlag()
-        //          regEECON1 -> setIntFlag
-        //          clearWriteBit();
-        
+        if( writeInProgress )
+        {
+            writeTimer--;
+            
+            if( writeTimer <= 0)
+            {
+                if( regEEADR < dataSize )
+                {
+                    data[regEEADR] = regEEDATA;
+                }
+                
+                setIntFlag();
+                clearWriteBit();
+            }
+        }
     }
     
     
@@ -64,9 +87,16 @@ public class EEPROM
     
     private void onRead()
     {
-        // if adr <= 64
-        //      regEEDATA = data[regAdr];
-        //      clearReadBit();
+        if( regEEADR < dataSize )
+        {
+            regEEDATA = data[regEEADR];
+        }
+        else
+        {
+            regEEDATA = 0;
+        }
+        
+        clearReadBit();    
     }
     
     private void onWrite()
@@ -75,8 +105,8 @@ public class EEPROM
         {
             if( getWriteEnabled() )
             {
-                // set timer
-                // set write in progress
+                writeTimer = writeTimerDefault;
+                writeInProgress = true;
             }
         }
     }
@@ -84,17 +114,23 @@ public class EEPROM
     
     private boolean getWriteEnabled()
     {
-        return false;
+        return (regEECON1 & 0x4) == 0x4;
     }
     
     private void clearReadBit()
     {
-        
+        regEECON1 &= BIT_EECON1_RD;
     }
     
     private void clearWriteBit()
     {
-        
+        regEECON1 &= BIT_EECON1_WR;
+    }
+    
+    private void setIntFlag()
+    {        
+        interuptController.setInterruptFlag( InterruptController.FLAG_EEPROM, true );
+        regEECON1 |= 0x10;
     }
     
     /************ Register Getters & Setters ************/
@@ -124,9 +160,28 @@ public class EEPROM
         return regEECON1;
     }
 
-    public void setRegEECON1(int regEECON1) 
+    public void setRegEECON1(int newValue) 
     {
-        this.regEECON1 = regEECON1;
+        newValue &= 0x1F; // only first five bits settable
+        int changedBits = regEECON1 ^ newValue; // Bitwise XOR 
+        regEECON1 = newValue & 0x1C; // WR and RD bit only settable
+        
+        if( (newValue & BIT_EECON1_EEIF) == BIT_EECON1_EEIF)
+        {
+            setIntFlag();
+        }
+
+        if( (newValue & BIT_EECON1_WR) == BIT_EECON1_WR)
+        {
+            regEECON1 |= BIT_EECON1_WR;
+            onWrite();
+        }
+        
+        if( (newValue & BIT_EECON1_RD) == BIT_EECON1_RD)
+        {
+            regEECON1 |= BIT_EECON1_RD;
+            onRead();
+        }
     }
     
     public int getRegEECON2() 
