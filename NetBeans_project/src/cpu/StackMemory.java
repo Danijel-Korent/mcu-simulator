@@ -48,4 +48,17 @@ public class StackMemory
         
         return stack[pointer];
     }
+    
+    public int getData( int address )
+    {
+        if ( address >= this.size) throw new IllegalArgumentException("Nedopustena vrijednost argumenta address: " + address);
+        
+        return stack[address];
+    }
+    
+    public int getStackPointer()
+    {
+        return this.pointer;
+    }
 }
+

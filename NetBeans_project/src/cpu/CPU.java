@@ -195,6 +195,18 @@ public class CPU implements CpuExternalInterface
         isInIsr = false;
     }
     
+    @Override
+    public int getStackData(int address) 
+    {
+        return this.HwStack.getData(address);
+    }
+
+    @Override
+    public int getStackPointer() 
+    {
+        return this.HwStack.getStackPointer();
+    }
+    
     /******************************** Private Methods *******************************************************************************************/
     
     private String PokusniProgramParser()

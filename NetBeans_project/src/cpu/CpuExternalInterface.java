@@ -29,5 +29,8 @@ public interface CpuExternalInterface extends CpuInternalInterface
     int getActiveBank();
     boolean isIsr();
     
+    int getStackData( int address );
+    int getStackPointer();
+    
     //get stack content and pointer??
 }
