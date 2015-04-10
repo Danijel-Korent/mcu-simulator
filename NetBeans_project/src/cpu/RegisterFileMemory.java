@@ -8,7 +8,7 @@ package cpu;
 import cpu.functionRegisters.RegisterIntcon;
 import cpu.functionRegisters.RegisterOption;
 import cpu.functionRegisters.RegisterTmr0;
-import cpu.modules.Timer;
+import cpu.modules.TimerController;
 import cpu.registers.Register8b_Base;
 import cpu.registers.Register8b_Standard;
 import cpu.registers.RegisterStatus;
@@ -39,7 +39,7 @@ public class RegisterFileMemory
     final Register8b_Base TRISB = new Register8b_Standard();
 
     // ToDo: 
-    public RegisterFileMemory(Timer timerModule, InterruptController interruptController) 
+    public RegisterFileMemory(TimerController timerModule, InterruptController interruptController) 
     {
         
         Register8b_Unimplemented regNeimplemetiran = new Register8b_Unimplemented();

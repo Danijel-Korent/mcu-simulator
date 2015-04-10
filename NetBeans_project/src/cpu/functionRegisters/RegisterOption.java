@@ -5,7 +5,7 @@
  */
 package cpu.functionRegisters;
 
-import cpu.modules.Timer;
+import cpu.modules.TimerController;
 import cpu.registers.Register8b_Base;
 
 /**
@@ -23,9 +23,9 @@ public class RegisterOption extends Register8b_Base
 
     
     private int regValue;
-    private Timer timer;
+    private TimerController timer;
     
-    public RegisterOption( Timer tmr) 
+    public RegisterOption( TimerController tmr) 
     {
         super();
         

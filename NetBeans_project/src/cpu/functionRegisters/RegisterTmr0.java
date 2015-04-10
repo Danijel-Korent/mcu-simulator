@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package cpu.functionRegisters;
-import cpu.modules.Timer;
+import cpu.modules.TimerController;
 import cpu.registers.Register8b_Base;
 
 /**
@@ -13,9 +13,9 @@ import cpu.registers.Register8b_Base;
  */
 public class RegisterTmr0 extends Register8b_Base
 {
-    private final Timer timerModule;
+    private final TimerController timerModule;
 
-    public RegisterTmr0(Timer timerModule) 
+    public RegisterTmr0(TimerController timerModule) 
     {
         super();
         this.timerModule = timerModule;

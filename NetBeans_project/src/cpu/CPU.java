@@ -4,7 +4,7 @@ import cpu.functionRegisters.RegisterPC;
 import cpu.registers.Register8b_Base;
 import cpu.instructions.Instruction;
 import cpu.modules.InterruptController;
-import cpu.modules.Timer;
+import cpu.modules.TimerController;
 import cpu.registers.RegisterStatus;
 import java.util.ArrayList;
 import parser.AsmInstruction;
@@ -26,7 +26,7 @@ public class CPU implements CpuExternalInterface
     
     // Modules
     private InterruptController interruptController;
-    private Timer timerModule;
+    private TimerController timerModule;
     
     // Memory
     private StackMemory HwStack;
@@ -59,7 +59,7 @@ public class CPU implements CpuExternalInterface
         isInIsr = false;
         
         interruptController = new InterruptController();
-        timerModule = new Timer(interruptController);
+        timerModule = new TimerController(interruptController);
         HwStack = new StackMemory(8);
         RegisterFile = new RegisterFileMemory(timerModule, interruptController);
     }

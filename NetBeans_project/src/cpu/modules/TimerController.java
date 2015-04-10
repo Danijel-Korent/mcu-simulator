@@ -9,7 +9,7 @@ package cpu.modules;
  *
  * @author dkorent
  */
-public class Timer 
+public class TimerController 
 {
     private int counter;
     private int prescalerCnt;
@@ -18,7 +18,7 @@ public class Timer
     
     private InterruptController interruptController;
     
-    public Timer(InterruptController intController )
+    public TimerController(InterruptController intController )
     {
         counter = 0;
         prescalerCnt = 0;

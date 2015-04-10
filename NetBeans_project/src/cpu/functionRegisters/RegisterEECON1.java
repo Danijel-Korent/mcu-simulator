@@ -5,7 +5,7 @@
  */
 package cpu.functionRegisters;
 
-import cpu.modules.EEPROM;
+import cpu.modules.EepromController;
 import cpu.registers.Register8b_Base;
 
 /**
@@ -14,9 +14,9 @@ import cpu.registers.Register8b_Base;
  */
 public class RegisterEECON1 extends Register8b_Base
 {
-    private EEPROM eeprom;
+    private EepromController eeprom;
 
-    public RegisterEECON1(EEPROM eeprom) 
+    public RegisterEECON1(EepromController eeprom) 
     {
         this.eeprom = eeprom;
     }

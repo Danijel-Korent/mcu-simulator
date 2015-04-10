@@ -9,7 +9,7 @@ package cpu.modules;
  *
  * @author koki
  */
-public class EEPROM 
+public class EepromController 
 {
     private int regEEADR;
     private int regEEDATA;
@@ -36,7 +36,7 @@ public class EEPROM
     private final int BIT_EECON1_WR    = 0x02;
     private final int BIT_EECON1_RD    = 0x01;
     
-    public EEPROM( InterruptController intCtrl) 
+    public EepromController( InterruptController intCtrl) 
     {
         for( int value : data)
         {
