@@ -1,7 +1,7 @@
 package gui;
 
 
-import cpu.CPU;
+import cpu.Cpu;
 import cpu.CpuExternalInterface;
 import cpu.registers.Register8b_Base;
 import cpu.registers.RegisterStatus;
@@ -27,7 +27,7 @@ public class App extends javax.swing.JFrame {
      * Creates new form App
      */
 
-    CPU cpu = new CPU();
+    Cpu cpu = new Cpu();
     SevenSegDisplay testDisplay;
     
     RomTableModel romTableModel = new RomTableModel( (CpuExternalInterface)cpu );

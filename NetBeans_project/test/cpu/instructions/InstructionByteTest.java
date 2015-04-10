@@ -6,7 +6,7 @@
 
 package cpu.instructions;
 
-import cpu.CPU;
+import cpu.Cpu;
 import cpu.functionRegisters.RegisterPC;
 import cpu.registers.Register8b_Base;
 import org.junit.After;
@@ -30,7 +30,7 @@ public class InstructionByteTest
     private final int GPR_START = 0x0C;
     private final int GPR_END   = 0x4F;
     
-    private CPU cpu;
+    private Cpu cpu;
     private RegisterPC regPc;
     private Register8b_Base regW;
     
@@ -52,7 +52,7 @@ public class InstructionByteTest
     @Before
     public void setUp() 
     {   
-        cpu = new CPU();
+        cpu = new Cpu();
         
         regPc = cpu.getPc();
         regW  = cpu.getW();
