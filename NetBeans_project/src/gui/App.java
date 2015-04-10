@@ -580,7 +580,7 @@ public class App extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         cpu.reset();
-        String errorMsg = cpu.ParseAssemblerCode( jTextArea1.getText() );
+        String errorMsg = cpu.parseAssemblerCode( jTextArea1.getText() );
         
         jLabelStatusBar.setText(errorMsg);
         refreshGui();

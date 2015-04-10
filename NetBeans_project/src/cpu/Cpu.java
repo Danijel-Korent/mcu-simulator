@@ -49,7 +49,7 @@ public class Cpu implements CpuExternalInterface
         AsmCode = PokusniProgramRotate();
         //AsmCode = PokusniProgramParser();
         
-        ParseAssemblerCode( AsmCode );
+        parseAssemblerCode( AsmCode );
     }
     
     /******************************** Public methods ********************************************************************************************/
@@ -88,7 +88,7 @@ public class Cpu implements CpuExternalInterface
         rom[ RegisterFile.PC.get() ].execute();
     }
     
-    public String ParseAssemblerCode( String text )
+    public String parseAssemblerCode( String text )
     {
         Parser parser = new Parser();
         ArrayList<AsmInstruction> instructions = parser.Parse( text );
