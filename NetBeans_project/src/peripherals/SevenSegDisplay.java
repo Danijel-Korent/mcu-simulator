@@ -49,11 +49,11 @@ public class SevenSegDisplay
       { 1, 1, 1, 1, 1, 1, 1 },  // 8
       { 1, 1, 1, 1, 0, 1, 1 },  // 9
       { 1, 1, 1, 1, 1, 1, 0 },  // A
-      { 0, 0, 0, 1, 0, 0, 0 },  // B
-      { 0, 0, 0, 1, 0, 0, 0 },  // C
-      { 0, 0, 0, 1, 0, 0, 0 },  // D
-      { 0, 0, 0, 1, 0, 0, 0 },  // E
-      { 0, 0, 0, 1, 0, 0, 0 },  // F   
+      { 0, 1, 0, 1, 1, 1, 1 },  // b
+      { 1, 1, 0, 0, 1, 0, 1 },  // C
+      { 0, 0, 1, 1, 1, 1, 1 },  // d
+      { 1, 1, 0, 1, 1, 0, 1 },  // E
+      { 1, 1, 0, 1, 1, 0, 0 },  // F   
     };
     
     // ToDo:  Slike mogu biti static i biti inicializirane u "Static Initialization Block"
@@ -136,8 +136,8 @@ public class SevenSegDisplay
     // ToDo: hardcoded values!!
     public void draw(Graphics g)
     {
-        int x = 100;
-        int y = 100;
+        int x = 75;
+        int y = 55;
         
         g.drawImage(imgPicDisp, x - 94, y - 48, null);
         
