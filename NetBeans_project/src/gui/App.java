@@ -112,6 +112,8 @@ public class App extends javax.swing.JFrame {
            jTable3.getColumnModel().getColumn(x).setCellRenderer(new RamTableCellRenderer( (CpuExternalInterface)cpu ));
         }
 
+        // Update values in GUI after evertything is initialized
+        refreshGui();   
     }
     
 
