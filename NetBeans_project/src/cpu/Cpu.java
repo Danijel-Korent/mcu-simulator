@@ -3,6 +3,7 @@ package cpu;
 import cpu.functionRegisters.RegisterPC;
 import cpu.registers.Register8b_Base;
 import cpu.instructions.Instruction;
+import cpu.modules.EepromController;
 import cpu.modules.InterruptController;
 import cpu.modules.TimerController;
 import cpu.registers.RegisterStatus;
@@ -27,6 +28,7 @@ public class Cpu implements CpuExternalInterface
     // Modules
     private InterruptController interruptController;
     private TimerController timerModule;
+    private EepromController eepromController;
     
     // Memory
     private StackMemory HwStack;
@@ -59,9 +61,10 @@ public class Cpu implements CpuExternalInterface
         isInIsr = false;
         
         interruptController = new InterruptController();
-        timerModule = new TimerController(interruptController);
+        eepromController = new EepromController( interruptController );
+        timerModule = new TimerController( interruptController );
         HwStack = new StackMemory(8);
-        RegisterFile = new RegisterFileMemory(timerModule, interruptController);
+        RegisterFile = new RegisterFileMemory( timerModule, interruptController );
     }
     
     public final void clearRom()
@@ -76,6 +79,7 @@ public class Cpu implements CpuExternalInterface
     public void executeInstruction()
     {
         timerModule.onTick();
+        eepromController.onTick();
         
         if ( interruptController.isInterrupted() )
         {

@@ -664,6 +664,7 @@ public class App extends javax.swing.JFrame {
         
         jLabelStatusBar.setText(errorMsg);
         refreshGui();
+        jTabbedPane1.setSelectedIndex( 1 );
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
