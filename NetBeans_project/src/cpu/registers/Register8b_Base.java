@@ -66,24 +66,32 @@ public abstract class Register8b_Base
     
     public Flags add(int k)
     {
-        if (k < 0 || k > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta k: " + k);
+        // check argument range
+        if (k < 0 || k > 255) 
+            throw new IllegalArgumentException("Nedopustena vrijednost k: "+ k);
         
-        Flags zastavice = new Flags();
-        int rez;
+        Flags cpuFlags = new Flags();
         
-        rez = this.get() + k;
-        if (rez > 0xFF) 
+        // do the operation
+        int result = this.get() + k;
+        
+        // check for overflow
+        if (result > 0xFF) 
         {
-            rez &= 0xFF;
-            zastavice.c = true;
+            result &= 0xFF; // simulate overflow
+            cpuFlags.c = true;
         }
         
-        if (rez == 0) zastavice.z = true;
-        if ( ((this.get() & 0xF) + (k & 0xF)) > 0xF ) zastavice.dc = true;
+        // check cpu flags
+        if (result == 0)
+            cpuFlags.z = true;
+        
+        if ( ((this.get() & 0xF) + (k & 0xF)) > 0xF )
+            cpuFlags.dc = true;
         
         
-        this.set(rez);
-        return zastavice;
+        this.set(result);
+        return cpuFlags;
     }
     
     public Flags sub(Register8b_Base reg)
@@ -95,25 +103,25 @@ public abstract class Register8b_Base
     {
         if (k < 0 || k > 255) throw new IllegalArgumentException("Nedopustena vrijednost argumenta k: " + k);
         
-        Flags zastavice = new Flags();
-        int rez;
+        Flags cpuFlags = new Flags();
+        int result;
         
-        zastavice.c = true;
-        zastavice.dc = true;
+        cpuFlags.c = true;
+        cpuFlags.dc = true;
         
-        rez = this.get() - k;
-        if (rez < 0) 
+        result = this.get() - k;
+        if (result < 0) 
         {
-            rez += 256;
-            zastavice.c = false;
+            result += 256;
+            cpuFlags.c = false;
         }
         
-        if (rez == 0) zastavice.z = true;
-        if ( ((this.get() & 0xF) - (k & 0xF)) < 0 ) zastavice.dc = false;
+        if (result == 0) cpuFlags.z = true;
+        if ( ((this.get() & 0xF) - (k & 0xF)) < 0 ) cpuFlags.dc = false;
         
         
-        this.set(rez);
-        return zastavice;
+        this.set(result);
+        return cpuFlags;
     }
     
     /* ###################### Logicke operacije ###################### */
