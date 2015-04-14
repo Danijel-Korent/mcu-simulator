@@ -48,7 +48,7 @@ implements TableCellRenderer
             if( address < 0xc )
             {
                 //setBackground(new Color(135,200,250));
-                setBackground(new Color(255,255,240));
+                setBackground(new Color(255,255,204));
                 
                 String tipText = "Special purpose registers";
 
@@ -79,17 +79,30 @@ implements TableCellRenderer
                     case 11: tipText = "INTCON";
                              break;
                 }
+                
+                if( address  ==  0x01 || address == 0x05 || address == 0x06 || address == 0x08 || address == 0x09 )
+                {
+                    if( cpu.getActiveBank() == 0)
+                    {
+                        setBackground(new Color(255,204,153));
+                    }
+                    else
+                    {
+                        setBackground(new Color(204,153,255));
+                    }
+                }
+                       
         
                 this.setToolTipText( tipText );
             }
             else if ( address < 0x50 )
             {
-                setBackground(new Color(240,255,240));
+                setBackground(new Color(204,255,204));
                 this.setToolTipText("General purpose registers");
             }
             else
             {
-                setBackground(new Color(255,240,240));
+                setBackground(new Color(255,204,204));
                 this.setToolTipText("Unimplemented address space");
             }
         }
